@@ -13,24 +13,26 @@ export default function HomeScreen(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.form}>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Share Food
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Accept Food
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Share Clothes
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Accept Clothes
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Animal Rescue
-        </Button>
-        <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
-          Adopt Animals
+        <View style={styles.leftt}>
+          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+            Share Food
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+            Accept Food
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+            Adopt Animals
+          </Button>
+        </View>
+        <View style={styles.right}>
+          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+            Share Clothes
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+            Accept Clothes
+          </Button>
+          <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.default}>
+          Logout
         </Button>
       </View>
     </View>
@@ -43,10 +45,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
   },
-  row: {
-    flexDirection: 'column',
-    marginTop: 4,
-    alignItems: 'center',
+  left: {
+    flex: 0.4,
+  },
+  right: {
+    flex: 0.6,
   },
   forgot: {
     fontSize: 13,
@@ -55,19 +58,15 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: 'bold',
   },
-  form: {
-    alignItems: 'center',
-    padding: 40,
-    marginLeft: 80,
-    marginTop: 40,
-    marginRight: 120
-  },
   default: {
     backgroundColor: 'blue',
     width: 300
   },
   container: {
-      flex: 1,
-      backgroundColor: 'white',
-    },
+    flexDirection: "row",
+    justifyContent:'center',
+    height: 100,
+    padding: 20,
+    width: '100%',
+  },
 })

@@ -3,8 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, createSwitchNavigator, createAppContainer, createNavigatorFactory } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { auth, analytics } from './firebase.js';
+import { auth, store } from './firebase.js';
 
 import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
@@ -45,9 +46,11 @@ export default function AuthNavigator() {
       }, [])
 
     function login(a) {
+        console.log("REF")
         addUser(a)
         const userRef = store.collection('users').doc(a.email);
-
+        console.log("REF2")
+        
         userRef.get().then((doc) => {
             if (doc.exists) {
                 console.log("LOGIN")
@@ -85,11 +88,12 @@ export default function AuthNavigator() {
     }
 
     function logout() {
-        auth().signOut()
+        console.log("logout")
+        auth.signOut()
         addUser(null)
     }
 
-    return !user ? (
+    return user ? (
     <MyTabs 
       user={user} 
       logout={logout}

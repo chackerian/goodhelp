@@ -40,8 +40,8 @@ export default function LoginScreen(props) {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        console.log("user",user)
-        // props.route.params.login(user)
+        console.log("IS USER")
+        props.route.params.login(user)
         // ...
       })
       .catch((error) => {
