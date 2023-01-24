@@ -4,8 +4,8 @@ import { Text, TextInput } from 'react-native-paper'
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState({ value: '', error: '' })
@@ -36,10 +36,11 @@ export default function LoginScreen(props) {
     }
 
     console.log(email.value, password.value)
-    firebase.auth().signInWithEmailAndPassword(email.value, password.value)
+    signInWithEmailAndPassword(auth, email.value, password.value)
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
+        console.log("user",user)
         // props.route.params.login(user)
         // ...
       })

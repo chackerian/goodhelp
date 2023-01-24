@@ -3,8 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, createSwitchNavigator, createAppContainer, createNavigatorFactory } from '@react-navigation/native';
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+
+import { auth, analytics } from './firebase.js';
 
 import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
@@ -85,7 +85,7 @@ export default function AuthNavigator() {
     }
 
     function logout() {
-        firebase.auth().signOut()
+        auth().signOut()
         addUser(null)
     }
 
@@ -144,16 +144,3 @@ function MyTabs(props) {
     </NavigationContainer>
     );
 }
-
-var firebaseConfig = {
-  apiKey: "AIzaSyA7WldXxpkXLKlZzDq3mQJvsyhVEvOGQbY",
-  authDomain: "goodhelp-c0f3f.firebaseapp.com",
-  projectId: "goodhelp-c0f3f",
-  storageBucket: "goodhelp-c0f3f.appspot.com",
-  messagingSenderId: "63733202674",
-  appId: "1:63733202674:web:3e053309e7860812619a6b",
-  measurementId: "G-EPGSNN4S65"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);

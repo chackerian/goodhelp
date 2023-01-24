@@ -4,17 +4,19 @@ import { Text, TextInput } from 'react-native-paper'
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function RegisterScreen(props) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [name, setName] = useState('')
+  const [location, setLocation] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const navigation = useNavigation();
 
     const createUser = async (email, password, name, location) => {
-     firebase.auth().createUserWithEmailAndPassword(email, password)
+     createUserWithEmailAndPassword(auth, email, password)
      .then((userCredential) => {
        const user = userCredential.user;
        if(user) {
@@ -33,12 +35,9 @@ export default function RegisterScreen(props) {
   }
 
   const onSignUpPressed = () => {
-    const email = route.params.email
-    const password = route.params.password
-    const name = route.params.name
-    const location = route.params.location
+    // check all the input data is valid and then createUser
     console.log(email, password, name, location)
-    createUser(email, password, name, location, tags)
+    createUser(email, password, name, location)
   }
 
   return (
@@ -50,30 +49,25 @@ export default function RegisterScreen(props) {
           returnKeyType="done"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
           style={{ width: 300 }}
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: '' })}
+          onChangeText={(text) => setName(text)}
           error={!!password.error}
           errorText={password.error}
-          secureTextEntry
         />
         <TextInput
           label="Location"
           returnKeyType="done"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
           style={{ width: 300 }}
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: '' })}
+          onChangeText={(text) => setLocation(text)}
           error={!!password.error}
           errorText={password.error}
-          secureTextEntry
         />
         <TextInput
           label="Email"
           returnKeyType="next"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
           style={{ width: 300 }}
-          value={email.value}
-          onChangeText={(text) => setEmail({ value: text, error: '' })}
+          onChangeText={(text) => setEmail(text)}
           error={!!email.error}
           errorText={email.error}
           autoCapitalize="none"
@@ -86,8 +80,7 @@ export default function RegisterScreen(props) {
           returnKeyType="done"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
           style={{ width: 300 }}
-          value={password.value}
-          onChangeText={(text) => setPassword({ value: text, error: '' })}
+          onChangeText={(text) => setPassword(text)}
           error={!!password.error}
           errorText={password.error}
           secureTextEntry
