@@ -13,22 +13,22 @@ export default function HomeScreen(props) {
 
   return (
     <View style={styles.container}>
-        <View style={styles.leftt}>
-          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+        <View style={styles.left}>
+          <Button mode="contained" onPress={() => navigation.navigate("Share Food")} style={styles.default}>
             Share Food
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Food")} style={styles.default}>
             Accept Food
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
             Adopt Animals
           </Button>
         </View>
         <View style={styles.right}>
-          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Share Clothes")} style={styles.default}>
             Share Clothes
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("ButtonScreen")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Clothes")} style={styles.default}>
             Accept Clothes
           </Button>
           <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.default}>
@@ -60,13 +60,15 @@ const styles = StyleSheet.create({
   },
   default: {
     backgroundColor: 'blue',
-    width: 300
+    width: 200,
+    fontSize: 15,
   },
   container: {
     flexDirection: "row",
     justifyContent:'center',
     height: 100,
     padding: 20,
+    margin: "350 80",
     width: '100%',
   },
 })

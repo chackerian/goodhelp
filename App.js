@@ -11,7 +11,13 @@ import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
 
 import HomeScreen from './screens/HomeScreen.js'
-import ButtonScreen from './screens/ButtonScreen.js'
+
+import ShareFood from './screens/ShareFood.js'
+import ShareClothes from './screens/ShareClothes.js'
+
+import AcceptFood from './screens/AcceptFood.js'
+import AcceptClothes from './screens/AcceptClothes.js'
+import AcceptAnimals from './screens/AcceptAnimals.js'
 
 export default function AuthNavigator() {
 
@@ -61,12 +67,9 @@ export default function AuthNavigator() {
                         name: a.name || "",
                         email: a.email || "",
                         picture: a.picture.data.url,
-                        likes: [],
-                        dislikes: [],
-                        matches: [],
-                        interests: [],
                         about: "",
-                        conversations: [],
+                        donationsMade: 0,
+                        donationsAccepted: 0,
                     })
                 } else {
                     console.log("CREATE")
@@ -74,12 +77,9 @@ export default function AuthNavigator() {
                         name: a.name || "",
                         email: a.email || "",
                         picture: "https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png",
-                        likes: [],
-                        dislikes: [],
-                        matches: [],
-                        interests: [],
                         about: "",
-                        conversations: [],
+                        donationsMade: 0,
+                        donationsAccepted: 0,
                     })
                 }
             }
@@ -140,8 +140,28 @@ function MyTabs(props) {
           }}
         />
         <AppStack.Screen
-          name="ButtonScreen"
-          component={ButtonScreen}
+          name="Share Food"
+          component={ShareFood}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Share Clothes"
+          component={ShareClothes}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Accept Food"
+          component={AcceptFood}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Accept Clothes"
+          component={AcceptClothes}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Adopt Animals"
+          component={AcceptAnimals}
           initialParams={{user: props.user, logout: props.logout}}
         />
       </AppStack.Navigator>

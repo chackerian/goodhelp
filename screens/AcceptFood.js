@@ -1,35 +1,30 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, Switch } from 'react-native'
 import { Text, TextInput, RadioButton } from 'react-native-paper'
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
-import firebase from 'firebase/app';
+import { store } from '../firebase.js';
 
-export default function ButtonScreen(props) {
+export default function AcceptFood(props) {
 
   const navigation = useNavigation();
-  const [checked, setChecked] = React.useState('first');
-
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
-      </View>
-       <RadioButton
-        value="first"
-        status={ checked === 'first' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('first')}
-      />
-      <RadioButton
-        value="second"
-        status={ checked === 'second' ? 'checked' : 'unchecked' }
-        onPress={() => setChecked('second')}
-      />
+
     </View>
   )
 }
+
+// title
+// category
+// quantity
+// condition
+// date of listing created
+// date and time of donation
+// do they deliver?
+// address
 
 const styles = StyleSheet.create({
   forgotPassword: {
@@ -41,6 +36,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 4,
     alignItems: 'center',
+  },
+  centered: {
+    flex: 1,
+    alignItems: "center",
   },
   forgot: {
     fontSize: 13,
