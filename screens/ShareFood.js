@@ -6,8 +6,9 @@ import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
 import { firestore } from '../firebase.js';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { SelectList } from 'react-native-dropdown-select-list'
 import ImageDropper from './ImageDropper.js';
+import { doc, setDoc } from "firebase/firestore"; 
 
 export default function ShareFood(props) {
 
@@ -16,11 +17,8 @@ export default function ShareFood(props) {
   const [title, setTitle] = useState({ value: '', error: '' })
   const [quantity, setQuantity] = useState({ value: '', error: '' })
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-
-  const [open2, setOpen2] = useState(false);
-  const [value2, setValue2] = useState(null);
+  const [selectedtype, setSelectedType] = React.useState([]);
+  const [selectedcondition, setSelectedCondition] = React.useState([]);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -38,13 +36,23 @@ export default function ShareFood(props) {
     { label: 'Bad', value: 'Bad' },
   ]);
 
+  const [selected1, setSelected1] = React.useState("");
+  const [selected2, setSelected2] = React.useState("");
+
   function onAddItem() {
     setShowForm(true)
   }
 
-  // function onSaveItem() {
-  //   firestore
-  // }
+  async function onSaveItem() {
+    // Add a new document in collection "cities"
+    await setDoc(doc(firestore, "food", title.value), {
+      title: title.value,
+      quantity: quantity.value,
+      deliverable: isEnabled,
+      type: selected1,
+      condition: selected2,
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -52,6 +60,7 @@ export default function ShareFood(props) {
         <View>
           <Text style={styles.formheading}>Donate Food</Text>
           <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
+          <Text> Deliverable?</Text>
           <Switch
             trackColor={{ false: '#767577', true: '#81b0ff' }}
             thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
@@ -70,27 +79,23 @@ export default function ShareFood(props) {
             error={!!title.error}
             errorText={title.error}
             autoCapitalize="none"
-            autoCompleteType="title"
           />
-          <DropDownPicker
-            placeholder="Select Type"
-            open={open}
-            value={value}
-            items={items}
-            style={styles.forminputs}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
+
+          <SelectList 
+            setSelected={(val) => setSelected1(val)} 
+            data={items} 
+            boxStyles={{width:200, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10}}
+            save="value"
+            placeholder="select type"
           />
-          <DropDownPicker
-            placeholder="Select Condition"
-            open={open2}
-            value={value2}
-            items={condition}
-            style={styles.forminputs}
-            setOpen={setOpen2}
-            setValue={setValue2}
-            setItems={setCondition}
+          <SelectList 
+            setSelected={(val) => setSelected2(val)} 
+            boxStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10}}
+            data={condition} 
+            save="value"
+            placeholder="select condition"
           />
 
           <TextInput
@@ -106,9 +111,11 @@ export default function ShareFood(props) {
             keyboardType='numeric'
           />
           <ImageDropper />
-          <Button mode="contained" onPress={onSaveItem} style={styles.default}>
-            Save Item
-          </Button>
+          <View style={styles.centered}>
+            <Button mode="contained" onPress={onSaveItem} style={styles.defaultsave}>
+              Save Item
+            </Button>
+          </View>
         </View>
       ) : null}
       <View style={styles.centered}>
@@ -152,13 +159,18 @@ const styles = StyleSheet.create({
     width: 300,
     alignItems: "center",
   },
+  defaultsave: {
+    backgroundColor: 'green',
+    width: 300,
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
   },
   switch: {
     width: 30,
-    marginLeft: Dimensions.get('window').width - 30,
+    marginLeft: Dimensions.get('window').width - 70,
   },
   forminputs: {
     width: Dimensions.get('window').width - 20,

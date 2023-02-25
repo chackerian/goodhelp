@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     marginTop: 30,
-    minHeight: 150,
+    minHeight: 100,
     borderRadius: 2,
     borderStyle: 'dashed',
     borderColor: 'black',
