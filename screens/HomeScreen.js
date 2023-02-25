@@ -40,27 +40,19 @@ export default function HomeScreen(props) {
 }
 
 const styles = StyleSheet.create({
-  forgotPassword: {
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
   left: {
     flex: 0.4,
+    marginRight: 60,
   },
   right: {
     flex: 0.6,
-  },
-  forgot: {
-    fontSize: 13,
-    color: "red",
   },
   link: {
     fontWeight: 'bold',
   },
   default: {
     backgroundColor: 'blue',
-    width: 200,
+    width: 180,
     fontSize: 15,
   },
   container: {

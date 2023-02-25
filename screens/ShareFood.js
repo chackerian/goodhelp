@@ -5,8 +5,9 @@ import { Text, TextInput, RadioButton } from 'react-native-paper'
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
-import { store } from '../firebase.js';
+import { firestore } from '../firebase.js';
 import DropDownPicker from 'react-native-dropdown-picker';
+import ImageDropper from './ImageDropper.js';
 
 export default function ShareFood(props) {
 
@@ -41,6 +42,10 @@ export default function ShareFood(props) {
     setShowForm(true)
   }
 
+  // function onSaveItem() {
+  //   firestore
+  // }
+
   return (
     <View style={styles.container}>
       {showForm ? (
@@ -68,7 +73,7 @@ export default function ShareFood(props) {
             autoCompleteType="title"
           />
           <DropDownPicker
-            label="Select Type"
+            placeholder="Select Type"
             open={open}
             value={value}
             items={items}
@@ -78,6 +83,7 @@ export default function ShareFood(props) {
             setItems={setItems}
           />
           <DropDownPicker
+            placeholder="Select Condition"
             open={open2}
             value={value2}
             items={condition}
@@ -99,6 +105,10 @@ export default function ShareFood(props) {
             autoCapitalize="none"
             keyboardType='numeric'
           />
+          <ImageDropper />
+          <Button mode="contained" onPress={onSaveItem} style={styles.default}>
+            Save Item
+          </Button>
         </View>
       ) : null}
       <View style={styles.centered}>
@@ -109,15 +119,6 @@ export default function ShareFood(props) {
     </View>
   )
 }
-
-// title
-// category
-// quantity
-// condition
-// date of listing created
-// date and time of donation
-// do they deliver?
-// address
 
 const styles = StyleSheet.create({
   centered: {

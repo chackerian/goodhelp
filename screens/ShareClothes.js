@@ -6,7 +6,8 @@ import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
 import { store } from '../firebase.js';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {Picker} from '@react-native-picker/picker';
+import ImageDropper from './ImageDropper.js';
 
 export default function ShareClothes(props) {
 
@@ -103,6 +104,7 @@ export default function ShareClothes(props) {
             autoCapitalize="none"
             style={styles.forminputs}
           />
+          <ImageDropper />
         </View>
       ) : null}
       <View style={styles.centered}>
