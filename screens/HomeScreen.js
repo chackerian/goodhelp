@@ -74,16 +74,19 @@ const styles = StyleSheet.create({
   right: {
     paddingHorizontal: 2,
   },
-  forgot: {
-    fontSize: 13,
-    color: "red",
-  },
   link: {
     fontWeight: "bold",
   },
   default: {
     backgroundColor: "blue",
     width: 170,
+    backgroundColor: 'blue',
+    width: 180,
+    fontSize: 15,
+  },
+  logout: {
+    backgroundColor: 'red',
+    width: 180,
     fontSize: 15,
   },
   container: {

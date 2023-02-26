@@ -6,7 +6,9 @@ import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 
 import { store } from '../firebase.js';
-import DropDownPicker from 'react-native-dropdown-picker';
+import {Picker} from '@react-native-picker/picker';
+import { SelectList } from 'react-native-dropdown-select-list'
+import ImageDropper from './ImageDropper.js';
 
 export default function ShareClothes(props) {
 
@@ -15,11 +17,8 @@ export default function ShareClothes(props) {
   const [title, setTitle] = useState({ value: '', error: '' })
   const [quantity, setQuantity] = useState({ value: '', error: '' })
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-
-  const [open2, setOpen2] = useState(false);
-  const [value2, setValue2] = useState(null);
+  const [selectedtype, setSelectedType] = React.useState([]);
+  const [selectedcondition, setSelectedCondition] = React.useState([]);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -42,8 +41,23 @@ export default function ShareClothes(props) {
     { label: 'Bad', value: 'Bad' },
   ]);
 
+  const [selected1, setSelected1] = React.useState("");
+  const [selected2, setSelected2] = React.useState("");
+
   function onAddItem() {
     setShowForm(true)
+  }
+
+  async function onSaveItem() {
+    // Add a new document in collection "cities"
+    await setDoc(doc(firestore, "food", title.value), {
+      title: title.value,
+      picture: "",
+      quantity: quantity.value,
+      deliverable: isEnabled,
+      type: selected1,
+      condition: selected2,
+    });
   }
 
   return (
@@ -70,26 +84,23 @@ export default function ShareClothes(props) {
             error={!!title.error}
             errorText={title.error}
             autoCapitalize="none"
-            autoCompleteType="title"
           />
-          <DropDownPicker
-            label="Select Type"
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            style={styles.forminputs}
+
+           <SelectList 
+            setSelected={(val) => setSelected1(val)} 
+            data={items} 
+            boxStyles={{width:200, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10}}
+            save="value"
+            placeholder="select type"
           />
-          <DropDownPicker
-            open={open2}
-            value={value2}
-            items={condition}
-            setOpen={setOpen2}
-            setValue={setValue2}
-            setItems={setCondition}
-            style={styles.forminputs}
+          <SelectList 
+            setSelected={(val) => setSelected2(val)} 
+            boxStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10}}
+            data={condition} 
+            save="value"
+            placeholder="select condition"
           />
 
           <TextInput
@@ -103,6 +114,12 @@ export default function ShareClothes(props) {
             autoCapitalize="none"
             style={styles.forminputs}
           />
+          <ImageDropper />
+          <View style={styles.centered}>
+            <Button mode="contained" onPress={onSaveItem} style={styles.defaultsave}>
+              Save Item
+            </Button>
+          </View>
         </View>
       ) : null}
       <View style={styles.centered}>
@@ -154,13 +171,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     width: 300
   },
+  defaultsave: {
+    backgroundColor: 'green',
+    width: 300,
+    alignItems: "center",
+  },
   container: {
     flex: 1,
     backgroundColor: 'white',
   },
   switch: {
     width: 30,
-    marginLeft: Dimensions.get('window').width - 30,
+    marginLeft: Dimensions.get('window').width - 70,
   },
   forminputs: {
     width: Dimensions.get('window').width - 20,

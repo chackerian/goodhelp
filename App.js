@@ -14,6 +14,7 @@ import HomeScreen from './screens/HomeScreen.js'
 
 import ShareFood from './screens/ShareFood.js'
 import ShareClothes from './screens/ShareClothes.js'
+import PostAnimals from './screens/PostAnimals.js'
 
 import AcceptFood from './screens/AcceptFood.js'
 import AcceptClothes from './screens/AcceptClothes.js'
@@ -147,6 +148,11 @@ function MyTabs(props) {
         <AppStack.Screen
           name="Share Clothes"
           component={ShareClothes}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Post Animals"
+          component={PostAnimals}
           initialParams={{user: props.user, logout: props.logout}}
         />
         <AppStack.Screen
