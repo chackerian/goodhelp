@@ -8,6 +8,7 @@ import { firestore } from '../firebase.js';
 import { SelectList } from 'react-native-dropdown-select-list'
 import ImageDropper from './ImageDropper.js';
 import { doc, setDoc } from "firebase/firestore"; 
+import SearchLocationInput from './SearchLocationInput'
 
 export default function ShareFood(props) {
 
@@ -60,6 +61,10 @@ export default function ShareFood(props) {
 
   const [selected1, setSelected1] = React.useState("");
   const [selected2, setSelected2] = React.useState("");
+  const [location, setLocation] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [LatLng, setLatLng] = useState({})
 
   const id = title.value + "-" + String(Math.round(Math.random()*100000))
 
@@ -100,7 +105,6 @@ export default function ShareFood(props) {
         keyExtractor={(item, index) => index.toString()} 
       />
       </View>
-      {showForm ? (
         <View>
           <Text style={styles.formheading}>Donate Food</Text>
           <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
@@ -127,6 +131,8 @@ export default function ShareFood(props) {
             errorText={title.error}
             autoCapitalize="none"
           />
+
+          <SearchLocationInput style={{width: 200, height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
 
           <SelectList 
             setSelected={(val) => setSelected1(val)} 
@@ -164,7 +170,6 @@ export default function ShareFood(props) {
             </Button>
           </View>
         </View>
-      ) : null}
       {showAdd ? (<View style={styles.centered}>
         <Button mode="contained" onPress={onAddItem} style={styles.default}>
           Add Item

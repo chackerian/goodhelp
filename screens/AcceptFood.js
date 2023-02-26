@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity, StyleSheet, View, FlatList, Image, ScrollView } from 'react-native'
 import { Text, TextInput, RadioButton } from 'react-native-paper'
 import Button from './Button';
@@ -19,7 +19,9 @@ export default function AcceptFood(props) {
   }
 
   const [LIST, setLIST] = useState([])
-  setFood()
+  useEffect(()=> {
+    setFood()
+  },[])
   const empty = () => {
     return (
       <View style={styles.empty}>
