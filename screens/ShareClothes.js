@@ -52,6 +52,7 @@ export default function ShareClothes(props) {
     // Add a new document in collection "cities"
     await setDoc(doc(firestore, "food", title.value), {
       title: title.value,
+      picture: "",
       quantity: quantity.value,
       deliverable: isEnabled,
       type: selected1,

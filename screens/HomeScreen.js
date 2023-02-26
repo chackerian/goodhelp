@@ -17,16 +17,16 @@ export default function HomeScreen(props) {
           <Button mode="contained" onPress={() => navigation.navigate("Share Food")} style={styles.default}>
             Share Food
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("Accept Food")} style={styles.default}>
-            Accept Food
+          <Button mode="contained" onPress={() => navigation.navigate("Share Clothes")} style={styles.default}>
+            Share Clothes
           </Button>
           <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
             Post Animals
           </Button>
         </View>
         <View style={styles.right}>
-          <Button mode="contained" onPress={() => navigation.navigate("Share Clothes")} style={styles.default}>
-            Share Clothes
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Food")} style={styles.default}>
+            Accept Food
           </Button>
           <Button mode="contained" onPress={() => navigation.navigate("Accept Clothes")} style={styles.default}>
             Accept Clothes
@@ -34,7 +34,7 @@ export default function HomeScreen(props) {
           <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
             Rescue Animals
           </Button>
-          <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.default}>
+          <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.logout}>
           Logout
         </Button>
       </View>
@@ -55,6 +55,11 @@ const styles = StyleSheet.create({
   },
   default: {
     backgroundColor: 'blue',
+    width: 180,
+    fontSize: 15,
+  },
+  logout: {
+    backgroundColor: 'red',
     width: 180,
     fontSize: 15,
   },

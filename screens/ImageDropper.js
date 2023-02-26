@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from './Button'
-import { store } from '../firebase.js';
+import { store, firestore } from '../firebase.js';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore"; 
 
 export default function ImageDropper(props) {
 
   const [image, setImage] = useState(null);
-  const [url, setImageURL] = useState("");
 
   const uploadImage = async (uri) => {
     const response = await fetch(uri);
@@ -15,19 +16,14 @@ export default function ImageDropper(props) {
 
     var filename = "images/" + "IMG" + Math.round(Math.random()*100000)
 
-    var refs = firebase.storage().ref().child(filename);
-    refs.put(blob).then((snapshot) => {
-      firebase.storage().ref(filename).getDownloadURL()
-        .then((url) => {
-          setImageURL(url);
-          var user = props.route.params.user.email
-          console.log("URL", url)
-          firebase.firestore().collection('users').doc(user).update({
-            picture: url
-          })
-      })
+    var storageRef = ref(store, filename)
 
-    })
+    uploadBytes(storageRef, blob).then((snapshot) => {
+      getDownloadURL(ref(store, filename)).then((url) => {
+        props.setImageURL(url);
+        console.log("URL", url)
+      })
+    });
 
   }
 
@@ -46,7 +42,6 @@ export default function ImageDropper(props) {
     }
   }
 
-
   return (
       <View style={styles.container}
         onClick={openImagePicker}
@@ -55,7 +50,7 @@ export default function ImageDropper(props) {
         mode="outlined"
         color="black"
         onPress={openImagePicker}>
-        Upload Image
+        Add Image
       </Button>
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
