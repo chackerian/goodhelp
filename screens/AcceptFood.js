@@ -19,9 +19,11 @@ export default function AcceptFood(props) {
   }
 
   const [LIST, setLIST] = useState([])
+
   useEffect(()=> {
     setFood()
   },[])
+
   const empty = () => {
     return (
       <View style={styles.empty}>

@@ -43,7 +43,7 @@ async function handlePlaceSelect(updateQuery, props) {
   var lng = addressObject.geometry.location.lng();
   props.setLocation(query)
   console.log("query", query.split(" "))
-  props.setLatLng({lat: lat, lng: lng})
+  props.setlatLng({lat: lat, lng: lng})
 }
 
 function SearchLocationInput(props) {
