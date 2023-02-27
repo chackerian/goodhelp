@@ -105,19 +105,18 @@ export default function ShareFood(props) {
         keyExtractor={(item, index) => index.toString()}
       />
       </View>
-        <View style={{ gap: 12 }}>
+        <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
           <View>
             <Text style={styles.formheading}>Donate Food</Text>
             <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
           </View>
           <View style={styles.switchContainer}>
-            <View>
+            <View style={{flexDirection: "row", gap: 5}}>
               <Text>Deliverable?</Text>
               <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
             </View>
             <Switch
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={isEnabled ? 'blue' : '#f4f3f4'}
+              trackColor={{ false: '#767577', true: 'green' }}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={isEnabled}
@@ -136,20 +135,23 @@ export default function ShareFood(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: "100%", height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
 
           <SelectList
             setSelected={(val) => setSelected1(val)}
             data={items}
             boxStyles={{width:"100%"}}
+            inputStyles={{ outline: "none"}}
             dropdownStyles={{width: "100%"}}
             save="value"
             placeholder="select type"
           />
           <SelectList
             setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: "100%"}}
+            boxStyles={{width: "100%", position: "relative"}}
+            inputStyles={{ outline: "none"}}
             dropdownStyles={{width: "100%"}}
+
             data={condition}
             save="value"
             placeholder="select condition"
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
   },
   switchContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center"
   },
   forminputs: {

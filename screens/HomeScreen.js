@@ -1,65 +1,45 @@
-import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, View } from "react-native";
-import { Text, TextInput } from "react-native-paper";
-import Button from "./Button";
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react'
+import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { Text, TextInput } from 'react-native-paper'
+import Button from './Button';
+import { useNavigation } from '@react-navigation/native';
 
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 // import 'firebase/auth';
 
 export default function HomeScreen(props) {
+
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <View style={styles.left}>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("Share Food")}
-          style={styles.default}
-        >
-          Share Food
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("Accept Food")}
-          style={styles.default}
-        >
-          Accept Food
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("Accept Animals")}
-          style={styles.default}
-        >
-          Adopt Animals
-        </Button>
-      </View>
-      <View style={styles.right}>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("Share Clothes")}
-          style={styles.default}
-        >
-          Share Clothes
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate("Accept Clothes")}
-          style={styles.default}
-        >
-          Accept Clothes
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => props.route.params.logout()}
-          style={styles.default}
-        >
+        <View style={styles.left}>
+          <Button mode="contained" onPress={() => navigation.navigate("Share Food")} style={styles.default}>
+            Share Food
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("Share Clothes")} style={styles.default}>
+            Share Clothes
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
+            Post Animals
+          </Button>
+        </View>
+        <View style={styles.right}>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Food")} style={styles.default}>
+            Accept Food
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Clothes")} style={styles.default}>
+            Accept Clothes
+          </Button>
+          <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
+            Rescue Animals
+          </Button>
+          <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.logout}>
           Logout
         </Button>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

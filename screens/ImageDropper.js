@@ -4,7 +4,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import Button from './Button'
 import { store, firestore } from '../firebase.js';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore";
 
 export default function ImageDropper(props) {
 
@@ -60,8 +60,6 @@ export default function ImageDropper(props) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginTop: 30,
-    minHeight: 100,
     borderRadius: 2,
     borderStyle: 'dashed',
     borderColor: 'black',
