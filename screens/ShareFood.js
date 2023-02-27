@@ -174,12 +174,6 @@ export default function ShareFood(props) {
             </Button>
           </View>
         </View>
-      {showAdd ? (<View style={styles.centered}>
-        <Button mode="contained" onPress={onAddItem} style={styles.default}>
-          Add Item
-        </Button>
-      </View>
-      ) : null}
     </ScrollView>
   )
 }
