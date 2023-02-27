@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     justifyContent: "center",
-    marginTop: 150,
+    marginTop: "auto",
+    marginBottom: "auto"
   },
 });

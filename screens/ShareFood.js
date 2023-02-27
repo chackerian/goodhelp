@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { firestore } from '../firebase.js';
 import { SelectList } from 'react-native-dropdown-select-list'
 import ImageDropper from './ImageDropper.js';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc } from "firebase/firestore";
 import SearchLocationInput from './SearchLocationInput'
 
 export default function ShareFood(props) {
@@ -102,15 +102,19 @@ export default function ShareFood(props) {
         data={LIST}
         ListEmptyComponent={empty}
         renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
-        keyExtractor={(item, index) => index.toString()} 
+        keyExtractor={(item, index) => index.toString()}
       />
       </View>
-        <View>
-          <Text style={styles.formheading}>Donate Food</Text>
-          <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
+        <View style={{ gap: 12 }}>
+          <View>
+            <Text style={styles.formheading}>Donate Food</Text>
+            <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
+          </View>
           <View style={styles.switchContainer}>
-            <Text>Deliverable?</Text>
-            <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
+            <View>
+              <Text>Deliverable?</Text>
+              <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
+            </View>
             <Switch
               trackColor={{ false: '#767577', true: '#81b0ff' }}
               thumbColor={isEnabled ? 'blue' : '#f4f3f4'}
@@ -132,21 +136,21 @@ export default function ShareFood(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: 200, height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+          <SearchLocationInput style={{width: "100%", height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
 
-          <SelectList 
-            setSelected={(val) => setSelected1(val)} 
-            data={items} 
-            boxStyles={{width:240, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
+          <SelectList
+            setSelected={(val) => setSelected1(val)}
+            data={items}
+            boxStyles={{width:"100%"}}
+            dropdownStyles={{width: "100%"}}
             save="value"
             placeholder="select type"
           />
-          <SelectList 
-            setSelected={(val) => setSelected2(val)} 
-            boxStyles={{width: 240, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
-            data={condition} 
+          <SelectList
+            setSelected={(val) => setSelected2(val)}
+            boxStyles={{width: "100%"}}
+            dropdownStyles={{width: "100%"}}
+            data={condition}
             save="value"
             placeholder="select condition"
           />
@@ -215,7 +219,6 @@ const styles = StyleSheet.create({
     marginRight: 120
   },
   deliverable: {
-    paddingLeft: 20,
   },
   default: {
     backgroundColor: 'blue',
@@ -251,24 +254,20 @@ const styles = StyleSheet.create({
   },
   switch: {
     width: 30,
-    marginLeft: Dimensions.get('window').width - 215,
-  },  
+  },
   switchContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center"
   },
   forminputs: {
-    width: Dimensions.get('window').width-60,
-    margin: 10,
+    width: "100%",
     zIndex: 2
   },
   formheading: {
     marginTop: 20,
-    marginLeft: 10,
     fontSize: 30,
   },
   formintro: {
-    margin: 10,
   }
 })
