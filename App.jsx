@@ -1,24 +1,22 @@
-import React, { useState, createContext, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer, createSwitchNavigator, createAppContainer, createNavigatorFactory } from '@react-navigation/native';
+import React, { useState, createContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NavigationContainer, createSwitchNavigator, createAppContainer, createNavigatorFactory } from '@react-navigation/native';
 
 import { auth, store } from './firebase.js';
 
-import LoginScreen from './screens/LoginScreen.js'
-import RegisterScreen from './screens/RegisterScreen.js'
-
-import HomeScreen from './screens/HomeScreen.js'
-
-import ShareFood from './screens/ShareFood.js'
-import ShareClothes from './screens/ShareClothes.js'
-import PostAnimals from './screens/PostAnimals.js'
-
-import AcceptFood from './screens/AcceptFood.js'
-import AcceptClothes from './screens/AcceptClothes.js'
-import AcceptAnimals from './screens/AcceptAnimals.js'
+//  Import of all screens
+import ShareFood from './src/screens/ShareFood'
+import HomeScreen from './src/screens/HomeScreen'
+import AcceptFood from './src/screens/AcceptFood'
+import PostAnimals from './src/screens/PostAnimals'
+import LoginScreen from './src/screens/LoginScreen'
+import ShareClothes from './src/screens/ShareClothes'
+import AcceptClothes from './src/screens/AcceptClothes'
+import AcceptAnimals from './src/screens/AcceptAnimals'
+import RegisterScreen from './src/screens/RegisterScreen'
 
 export default function AuthNavigator() {
 
@@ -57,7 +55,7 @@ export default function AuthNavigator() {
         addUser(a)
         const userRef = store.collection('users').doc(a.email);
         console.log("REF2")
-        
+
         userRef.get().then((doc) => {
             if (doc.exists) {
                 console.log("LOGIN")
@@ -95,8 +93,8 @@ export default function AuthNavigator() {
     }
 
     return user ? (
-    <MyTabs 
-      user={user} 
+    <MyTabs
+      user={user}
       logout={logout}
       onStateChange={(state) =>
         console.log("CHANGED", state)

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from './Button'
-import { store, firestore } from '../firebase.js';
+import { store, firestore } from '../../firebase.js';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 

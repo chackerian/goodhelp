@@ -1,50 +1,27 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native'
+import { Dimensions } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Switch } from 'react-native'
 import { Text, TextInput, RadioButton } from 'react-native-paper'
-import Button from './Button';
+import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 
-import { firestore } from '../firebase.js';
+import { firestore } from '../../firebase.js';
 import { SelectList } from 'react-native-dropdown-select-list'
-import ImageDropper from './ImageDropper.js';
+import ImageDropper from '../components/ImageDropper';
 import { doc, setDoc } from "firebase/firestore";
-import SearchLocationInput from './SearchLocationInput'
 
-export default function ShareFood(props) {
+export default function PostAnimals(props) {
 
   const navigation = useNavigation();
   const [showForm, setShowForm] = useState(false)
-  const [showAdd, setShowAdd] = useState(true)
   const [title, setTitle] = useState({ value: '', error: '' })
   const [quantity, setQuantity] = useState({ value: '', error: '' })
-  const [imageURL, setImageURL] = useState("")
 
   const [selectedtype, setSelectedType] = React.useState([]);
   const [selectedcondition, setSelectedCondition] = React.useState([]);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-  const [LIST, setLIST] = useState([])
-
-  const empty = () => {
-    return (
-      <View style={styles.empty}>
-      <Text></Text>
-      </View>
-    )
-  }
-
-  const Item = ({title, quantity, picture, index}) => (
-    <View style={styles.item} key={index}>
-      <Image source={{uri: picture}}
-        style={styles.icon}
-      />
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.quantity}>{quantity}</Text>
-    </View>
-  );
-
   const [items, setItems] = useState([
     { label: 'Fruit', value: 'Fruit' },
     { label: 'Vegetables', value: 'Vegetables' },
@@ -61,62 +38,33 @@ export default function ShareFood(props) {
 
   const [selected1, setSelected1] = React.useState("");
   const [selected2, setSelected2] = React.useState("");
-  const [location, setLocation] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [LatLng, setLatLng] = useState({})
-
-  const id = title.value + "-" + String(Math.round(Math.random()*100000))
 
   function onAddItem() {
     setShowForm(true)
-    setShowAdd(false)
   }
 
   async function onSaveItem() {
-    console.log("url posting", imageURL)
-    await setDoc(doc(firestore, "food", id), {
+    // Add a new document in collection "cities"
+    await setDoc(doc(firestore, "food", title.value), {
       title: title.value,
-      picture: imageURL,
       quantity: quantity.value,
       deliverable: isEnabled,
       type: selected1,
       condition: selected2,
     });
-    var obj = {
-      picture: imageURL,
-      title: title.value,
-      quantity: quantity.value
-    }
-    setLIST(LIST => [...LIST, obj])
-    setTitle("")
-    setSelected1("")
-    setSelected2("")
-    setQuantity("")
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View>
-      <FlatList
-        data={LIST}
-        ListEmptyComponent={empty}
-        renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      </View>
-        <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
-          <View>
-            <Text style={styles.formheading}>Donate Food</Text>
-            <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
-          </View>
+    <View style={styles.container}>
+        <View>
+          <Text style={styles.formheading}>List Animals for Adoption</Text>
+          <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
           <View style={styles.switchContainer}>
-            <View style={{flexDirection: "row", gap: 5}}>
-              <Text>Deliverable?</Text>
-              <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
-            </View>
+            <Text>Deliverable?</Text>
+            <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
             <Switch
-              trackColor={{ false: '#767577', true: 'green' }}
+              trackColor={{ false: '#767577', true: '#81b0ff' }}
+              thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={isEnabled}
@@ -135,23 +83,18 @@ export default function ShareFood(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
-
           <SelectList
             setSelected={(val) => setSelected1(val)}
             data={items}
-            boxStyles={{width:"100%"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
+            boxStyles={{width:240, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
             save="value"
             placeholder="select type"
           />
           <SelectList
             setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: "100%", position: "relative"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
-
+            boxStyles={{width: 240, marginLeft: 10, marginBottom: 10}}
+            dropdownStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
             data={condition}
             save="value"
             placeholder="select condition"
@@ -169,25 +112,18 @@ export default function ShareFood(props) {
             autoCapitalize="none"
             keyboardType='numeric'
           />
-          <ImageDropper setImageURL={setImageURL}/>
+          <ImageDropper />
           <View style={styles.centered}>
             <Button mode="contained" onPress={onSaveItem} style={styles.defaultsave}>
               Save Item
             </Button>
           </View>
         </View>
-    </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
-  empty: {
-    height: 20,
-  },
-  icon: {
-    width: 36,
-    height: 38,
-  },
   centered: {
     alignItems: "center",
   },
@@ -215,10 +151,11 @@ const styles = StyleSheet.create({
     marginRight: 120
   },
   deliverable: {
+    paddingLeft: 20,
   },
   default: {
     backgroundColor: 'blue',
-    width: 280,
+    width: 300,
     alignItems: "center",
   },
   defaultsave: {
@@ -229,41 +166,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 30,
-  },
-  item: {
-    flexDirection: "row",
-    backgroundColor: '#d3d3d3',
-    padding: 15,
-    marginVertical: 4,
-    marginHorizontal: 4,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 20,
-    paddingLeft: 15,
-  },
-  quantity: {
-    fontSize: 20,
-    marginLeft: 'auto'
   },
   switch: {
     width: 30,
+    marginLeft: Dimensions.get('window').width - 160,
   },
   switchContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center"
   },
   forminputs: {
-    width: "100%",
+    width: Dimensions.get('window').width / 3,
+    margin: 10,
     zIndex: 2
   },
   formheading: {
     marginTop: 20,
+    marginLeft: 10,
     fontSize: 30,
   },
   formintro: {
+    margin: 10,
   }
 })

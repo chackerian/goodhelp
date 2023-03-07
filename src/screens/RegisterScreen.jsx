@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { TouchableOpacity, StyleSheet, View } from 'react-native'
 import { Text, TextInput } from 'react-native-paper'
-import Button from './Button';
+import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 
-import { auth } from '../firebase';
+import { auth } from '../../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export default function RegisterScreen(props) {

@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
-import { Text, TextInput } from 'react-native-paper'
-import Button from './Button';
+import React, { useState } from 'react';
+import { Text, TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-
-import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
+
+import { auth } from '../../firebase';
+
+import Button from '../components/Button';
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState({ value: '', error: '' })

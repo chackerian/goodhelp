@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View, FlatList } from 'react-native'
-import { Text, TextInput, RadioButton } from 'react-native-paper'
-import Button from './Button';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { Text, TextInput, RadioButton } from 'react-native-paper';
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { TouchableOpacity, StyleSheet, View, FlatList } from 'react-native';
 
-import { firestore } from '../firebase.js';
+import { firestore } from '../../firebase.js';
+
+import Button from '../components/Button';
 
 export default function AcceptClothes(props) {
 

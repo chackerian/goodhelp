@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
-import { Text, TextInput, RadioButton } from 'react-native-paper'
-import Button from './Button';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
+import { Text, TextInput, RadioButton } from 'react-native-paper';
 
 import firebase from 'firebase/app';
+
+import Button from '../components/Button';
 
 export default function AcceptAnimals(props) {
 
   const navigation = useNavigation();
   const [checked, setChecked] = React.useState('first');
-
 
   return (
     <View style={styles.container}>
