@@ -20,7 +20,7 @@ export default function HomeScreen(props) {
           <Button mode="contained" onPress={() => navigation.navigate("Share Clothes")} style={styles.default}>
             Share Clothes
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Post Animals")} style={styles.default}>
             Post Animals
           </Button>
         </View>
@@ -31,7 +31,7 @@ export default function HomeScreen(props) {
           <Button mode="contained" onPress={() => navigation.navigate("Accept Clothes")} style={styles.default}>
             Accept Clothes
           </Button>
-          <Button mode="contained" onPress={() => navigation.navigate("Accept Animals")} style={styles.default}>
+          <Button mode="contained" onPress={() => navigation.navigate("Adopt Animals")} style={styles.default}>
             Rescue Animals
           </Button>
           <Button mode="contained" onPress={() => props.route.params.logout()} style={styles.logout}>

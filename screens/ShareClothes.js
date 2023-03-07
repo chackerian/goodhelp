@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dimensions } from 'react-native';
-import { TouchableOpacity, StyleSheet, View, Switch } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, Switch, ScrollView } from 'react-native'
 import { Text, TextInput, RadioButton } from 'react-native-paper'
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
@@ -49,31 +49,48 @@ export default function ShareClothes(props) {
   }
 
   async function onSaveItem() {
-    // Add a new document in collection "cities"
-    await setDoc(doc(firestore, "food", title.value), {
+    console.log("url posting", imageURL)
+    await setDoc(doc(firestore, "food", id), {
       title: title.value,
-      picture: "",
+      picture: imageURL,
       quantity: quantity.value,
       deliverable: isEnabled,
       type: selected1,
       condition: selected2,
     });
+    var obj = {
+      picture: imageURL,
+      title: title.value,
+      quantity: quantity.value
+    }
+    setLIST(LIST => [...LIST, obj])
+    setTitle("")
+    setSelected1("")
+    setSelected2("")
+    setQuantity("")
   }
 
   return (
-    <View style={styles.container}>
-      {showForm ? (
+    <ScrollView style={styles.container}>
+      <View>
+        <FlatList
+          data={LIST}
+          ListEmptyComponent={empty}
+          renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
         <View>
           <Text style={styles.formheading}>Donate Clothes</Text>
           <Text style={styles.formintro}>Happiness doesn’t result from what we get, but from what we give.</Text>
           <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-            style={styles.switch}
-          />
+              trackColor={{ false: '#767577', true: 'green' }}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitch}
+              value={isEnabled}
+              style={styles.switch}
+            />
           <TextInput
             label="Title"
             returnKeyType="next"
@@ -121,26 +138,18 @@ export default function ShareClothes(props) {
             </Button>
           </View>
         </View>
-      ) : null}
-      <View style={styles.centered}>
-        <Button mode="contained" onPress={onAddItem} style={styles.default}>
-          Add Item
-        </Button>
-      </View>
     </View>
   )
 }
 
-// title
-// category
-// quantity
-// condition
-// date of listing created
-// date and time of donation
-// do they deliver?
-// address
-
 const styles = StyleSheet.create({
+  empty: {
+    height: 20,
+  },
+  icon: {
+    width: 36,
+    height: 38,
+  },
   centered: {
     alignItems: "center",
   },
@@ -167,9 +176,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 120
   },
+  deliverable: {
+  },
   default: {
     backgroundColor: 'blue',
-    width: 300
+    width: 280,
+    alignItems: "center",
   },
   defaultsave: {
     backgroundColor: 'green',
@@ -179,22 +191,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    padding: 30,
+  },
+  item: {
+    flexDirection: "row",
+    backgroundColor: '#d3d3d3',
+    padding: 15,
+    marginVertical: 4,
+    marginHorizontal: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 20,
+    paddingLeft: 15,
+  },
+  quantity: {
+    fontSize: 20,
+    marginLeft: 'auto'
   },
   switch: {
     width: 30,
-    marginLeft: Dimensions.get('window').width - 70,
+  },
+  switchContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   },
   forminputs: {
-    width: Dimensions.get('window').width - 20,
-    margin: 10,
+    width: "100%",
     zIndex: 2
   },
   formheading: {
     marginTop: 20,
-    marginLeft: 10,
     fontSize: 30,
   },
   formintro: {
-    margin: 10,
   }
 })

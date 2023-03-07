@@ -56,7 +56,6 @@ export default function PostAnimals(props) {
 
   return (
     <View style={styles.container}>
-      {showForm ? (
         <View>
           <Text style={styles.formheading}>List Animals for Adoption</Text>
           <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
@@ -120,12 +119,6 @@ export default function PostAnimals(props) {
             </Button>
           </View>
         </View>
-      ) : null}
-      <View style={styles.centered}>
-        <Button mode="contained" onPress={onAddItem} style={styles.default}>
-          Add Item
-        </Button>
-      </View>
     </View>
   )
 }
