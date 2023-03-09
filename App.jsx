@@ -9,13 +9,15 @@ import { auth, store } from './firebase.js';
 
 //  Import of all screens
 import ShareFood from './src/screens/ShareFood'
-import HomeScreen from './src/screens/HomeScreen'
-import AcceptFood from './src/screens/AcceptFood'
-import PostAnimals from './src/screens/PostAnimals'
-import LoginScreen from './src/screens/LoginScreen'
 import ShareClothes from './src/screens/ShareClothes'
+import PostAnimals from './src/screens/PostAnimals'
+
+import AcceptFood from './src/screens/AcceptFood'
 import AcceptClothes from './src/screens/AcceptClothes'
 import AcceptAnimals from './src/screens/AcceptAnimals'
+
+import HomeScreen from './src/screens/HomeScreen'
+import LoginScreen from './src/screens/LoginScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 
 export default function AuthNavigator() {

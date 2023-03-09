@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import Button from '../components/Button';
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { Text, TextInput, RadioButton } from 'react-native-paper'
+import { Text, TextInput } from 'react-native-paper'
 import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
 
 import { firestore } from '../../firebase.js';
 
 // Import for all components
+import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
 import SearchLocationInput from '../components/SearchLocationInput';
 
@@ -20,12 +20,13 @@ export default function ShareFood(props) {
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
   const [LatLng, setLatLng] = useState({});
-  const [showAdd, setShowAdd] = useState(true);
+
   const [location, setLocation] = useState('');
   const [imageURL, setImageURL] = useState("");
+
   const [selected1, setSelected1] = useState("");
   const [selected2, setSelected2] = useState("");
-  const [showForm, setShowForm] = useState(false);
+
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedtype, setSelectedType] = useState([]);
   const [title, setTitle] = useState({ value: '', error: '' });
@@ -57,18 +58,11 @@ export default function ShareFood(props) {
       <Text style={styles.quantity}>{quantity}</Text>
     </View>
 
-
   const [condition, setCondition] = useState([
     { label: 'Good', value: 'Good' },
     { label: 'Mediocre', value: 'Mediocre' },
     { label: 'Bad', value: 'Bad' },
   ]);
-
-
-  function onAddItem() {
-    setShowForm(true)
-    setShowAdd(false)
-  }
 
   async function onSaveItem() {
     console.log("url posting", imageURL)
@@ -260,7 +254,5 @@ const styles = StyleSheet.create({
   formheading: {
     marginTop: 20,
     fontSize: 30,
-  },
-  formintro: {
   }
 })

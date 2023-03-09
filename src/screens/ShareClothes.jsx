@@ -1,27 +1,39 @@
-import React, { useState } from 'react';
-import { Dimensions } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+import React, { useState } from 'react'
+import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
-import { SelectList } from 'react-native-dropdown-select-list';
-import { Text, TextInput, RadioButton } from 'react-native-paper';
-import { TouchableOpacity, StyleSheet, View, Switch, ScrollView } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list'
+import { Text, TextInput, RadioButton } from 'react-native-paper'
+import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
 
-import { store } from '../../firebase.js';
+import { firestore } from '../../firebase.js';
 
+// Import for all components
 import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
+import SearchLocationInput from '../components/SearchLocationInput';
 
 export default function ShareClothes(props) {
 
   const navigation = useNavigation();
-  const [showForm, setShowForm] = useState(false)
+  const [LIST, setLIST] = useState([]);
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [LatLng, setLatLng] = useState({});
+
   const [title, setTitle] = useState({ value: '', error: '' })
   const [quantity, setQuantity] = useState({ value: '', error: '' })
+
+  const [location, setLocation] = useState('');
+  const [imageURL, setImageURL] = useState("");
+
+  const [selected1, setSelected1] = React.useState("");
+  const [selected2, setSelected2] = React.useState("");
 
   const [selectedtype, setSelectedType] = React.useState([]);
   const [selectedcondition, setSelectedCondition] = React.useState([]);
 
   const [isEnabled, setIsEnabled] = useState(false);
+  const id = title.value + "-" + String(Math.round(Math.random()*100000))
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const [items, setItems] = useState([
     { label: 'Polo Shirt', value: 'Polo Shirt' },
@@ -36,22 +48,29 @@ export default function ShareClothes(props) {
     { label: 'Hat', value: 'Hat' },
   ]);
 
+  const empty = () => {
+    return <View style={styles.empty}>
+        <Text></Text>
+      </View>
+  }
+
+  const Item = ({title, quantity, picture, index}) => <View style={styles.item} key={index}>
+      <Image source={{uri: picture}}
+        style={styles.icon}
+      />
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.quantity}>{quantity}</Text>
+    </View>
+
   const [condition, setCondition] = useState([
     { label: 'Good', value: 'Good' },
     { label: 'Mediocre', value: 'Mediocre' },
     { label: 'Bad', value: 'Bad' },
   ]);
 
-  const [selected1, setSelected1] = React.useState("");
-  const [selected2, setSelected2] = React.useState("");
-
-  function onAddItem() {
-    setShowForm(true)
-  }
-
   async function onSaveItem() {
     console.log("url posting", imageURL)
-    await setDoc(doc(firestore, "food", id), {
+    await setDoc(doc(firestore, "clothes", id), {
       title: title.value,
       picture: imageURL,
       quantity: quantity.value,
@@ -74,24 +93,31 @@ export default function ShareClothes(props) {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <FlatList
-          data={LIST}
-          ListEmptyComponent={empty}
-          renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
-          keyExtractor={(item, index) => index.toString()}
-        />
+      <FlatList
+        data={LIST}
+        ListEmptyComponent={empty}
+        renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
+        keyExtractor={(item, index) => index.toString()}
+      />
       </View>
-      <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
-        <View>
-          <Text style={styles.formheading}>Donate Clothes</Text>
-          <Text style={styles.formintro}>Happiness doesn’t result from what we get, but from what we give.</Text>
-          <Switch
+        <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
+          <View>
+            <Text style={styles.formheading}>Donate Clothes</Text>
+            <Text style={styles.formintro}>Happiness doesn’t result from what we get, but from what we give.</Text>
+          </View>
+          <View style={styles.switchContainer}>
+            <View style={{flexDirection: "row", gap: 5}}>
+              <Text>Deliverable?</Text>
+              <Text style={styles.deliverable}>{isEnabled ? "YES" : "NO"}</Text>
+            </View>
+            <Switch
               trackColor={{ false: '#767577', true: 'green' }}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={isEnabled}
               style={styles.switch}
             />
+          </View>
           <TextInput
             label="Title"
             returnKeyType="next"
@@ -104,18 +130,23 @@ export default function ShareClothes(props) {
             autoCapitalize="none"
           />
 
-           <SelectList
+          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+
+          <SelectList
             setSelected={(val) => setSelected1(val)}
             data={items}
-            boxStyles={{width:200, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10}}
+            boxStyles={{width:"100%"}}
+            inputStyles={{ outline: "none"}}
+            dropdownStyles={{width: "100%"}}
             save="value"
             placeholder="select type"
           />
           <SelectList
             setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10}}
+            boxStyles={{width: "100%", position: "relative"}}
+            inputStyles={{ outline: "none"}}
+            dropdownStyles={{width: "100%"}}
+
             data={condition}
             save="value"
             placeholder="select condition"
@@ -125,22 +156,22 @@ export default function ShareClothes(props) {
             label="Quantity"
             returnKeyType="next"
             theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
+            style={styles.forminputs}
             value={quantity.value}
             onChangeText={(text) => setQuantity({ value: text, error: '' })}
             error={!!quantity.error}
             errorText={quantity.error}
             autoCapitalize="none"
-            style={styles.forminputs}
+            keyboardType='numeric'
           />
-          <ImageDropper />
+          <ImageDropper setImageURL={setImageURL}/>
           <View style={styles.centered}>
             <Button mode="contained" onPress={onSaveItem} style={styles.defaultsave}>
               Save Item
             </Button>
           </View>
         </View>
-    </View>
-  </ScrollView>
+    </ScrollView>
   )
 }
 
@@ -227,7 +258,5 @@ const styles = StyleSheet.create({
   formheading: {
     marginTop: 20,
     fontSize: 30,
-  },
-  formintro: {
   }
 })

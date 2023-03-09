@@ -22,6 +22,27 @@ export default function ShareClothes(props) {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const [LIST, setLIST] = useState([])
+
+  const empty = () => {
+    return (
+      <View style={styles.empty}>
+      <Text></Text>
+      </View>
+    )
+  }
+
+  const Item = ({title, quantity, picture, index}) => (
+    <View style={styles.item} key={index}>
+      <Image source={{uri: picture}}
+        style={styles.icon}
+      />
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.quantity}>{quantity}</Text>
+    </View>
+  );
+
   const [items, setItems] = useState([
     { label: 'Polo Shirt', value: 'Polo Shirt' },
     { label: 'Dress', value: 'Dress' },
@@ -138,7 +159,7 @@ export default function ShareClothes(props) {
             </Button>
           </View>
         </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -225,7 +246,5 @@ const styles = StyleSheet.create({
   formheading: {
     marginTop: 20,
     fontSize: 30,
-  },
-  formintro: {
   }
 })
