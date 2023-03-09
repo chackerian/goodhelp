@@ -4,19 +4,29 @@ import {Picker} from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Text, TextInput, RadioButton } from 'react-native-paper';
-import { TouchableOpacity, StyleSheet, View, Switch, ScrollView } from 'react-native';
+import {
+  View,
+  Switch,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 
 import { store } from '../../firebase.js';
 
 import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
+import Select from '../components/Select.jsx';
 
 export default function ShareClothes(props) {
 
   const navigation = useNavigation();
-  const [showForm, setShowForm] = useState(false)
-  const [title, setTitle] = useState({ value: '', error: '' })
-  const [quantity, setQuantity] = useState({ value: '', error: '' })
+
+  const [setLIST, LIST] = useState();
+  const [showForm, setShowForm] = useState(false);
+  const [title, setTitle] = useState({ value: '', error: '' });
+  const [quantity, setQuantity] = useState({ value: '', error: '' });
 
   const [selectedtype, setSelectedType] = React.useState([]);
   const [selectedcondition, setSelectedCondition] = React.useState([]);
@@ -74,12 +84,12 @@ export default function ShareClothes(props) {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <FlatList
+        {/* <FlatList
           data={LIST}
           ListEmptyComponent={empty}
           renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
           keyExtractor={(item, index) => index.toString()}
-        />
+        /> */}
       </View>
       <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
         <View>
@@ -104,22 +114,15 @@ export default function ShareClothes(props) {
             autoCapitalize="none"
           />
 
-           <SelectList
-            setSelected={(val) => setSelected1(val)}
+          <Select
             data={items}
-            boxStyles={{width:200, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10}}
-            save="value"
             placeholder="select type"
-          />
-          <SelectList
-            setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: 200, marginLeft: 10, marginBottom: 10}}
-            dropdownStyles={{width: 200, marginLeft: 10}}
+            boxStyles={{ width:200, marginLeft: 10, marginBottom: 10 }}/>
+
+          <Select
             data={condition}
-            save="value"
             placeholder="select condition"
-          />
+            boxStyles={{ width:200, marginLeft: 10, marginBottom: 10 }}/>
 
           <TextInput
             label="Quantity"
