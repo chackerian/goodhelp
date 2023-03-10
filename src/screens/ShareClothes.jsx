@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
-import { SelectList } from 'react-native-dropdown-select-list'
 import { Text, TextInput, RadioButton } from 'react-native-paper'
 import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 
 import { firestore } from '../../firebase.js';
 
 // Import for all components
 import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
+
 import SearchLocationInput from '../components/SearchLocationInput';
+
+import Select from '../components/Select.tsx';
 
 export default function ShareClothes(props) {
 
@@ -130,8 +133,6 @@ export default function ShareClothes(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
-
           <SelectList
             setSelected={(val) => setSelected1(val)}
             data={items}
@@ -141,6 +142,7 @@ export default function ShareClothes(props) {
             save="value"
             placeholder="select type"
           />
+
           <SelectList
             setSelected={(val) => setSelected2(val)}
             boxStyles={{width: "100%", position: "relative"}}
@@ -208,8 +210,6 @@ const styles = StyleSheet.create({
     padding: 0,
     marginLeft: 20,
     marginRight: 120
-  },
-  deliverable: {
   },
   default: {
     backgroundColor: 'blue',
