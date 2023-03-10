@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { RiArrowDropDownLine, RiArrowDropUpLine, RiCloseLine } from "react-icons/ri"
 
 const selectList = React.forwardRef((props, ref) => {
     const {
@@ -38,10 +39,13 @@ const selectList = React.forwardRef((props, ref) => {
     return <View style={boxStyles} >
         <TouchableOpacity style={styles.wrapper} onPress={handleOpen}>
             <Text>{current || placeholder}</Text>
-            {current &&
+            {current ?
                 <TouchableOpacity onPress={() => handleReset()} ref={ref}>
-                    <Text>X</Text>
-                </TouchableOpacity>}
+                    <RiCloseLine />
+                </TouchableOpacity>
+            :
+                isClosed ? <RiArrowDropDownLine/> : <RiArrowDropUpLine />
+            }
         </TouchableOpacity>
         <View style={[styles.dropdown, isClosed && styles.isClosed]} >{options}</View>
     </View>
@@ -49,7 +53,7 @@ const selectList = React.forwardRef((props, ref) => {
 
 const styles = StyleSheet.create({
     isClosed: {height: 0, display: "none"},
-    wrapper:{ borderWidth:1,borderRadius:10,borderColor:'gray',paddingHorizontal:20,paddingVertical:12,flexDirection:'row',justifyContent:'space-between' },
+    wrapper:{ borderWidth:1,borderRadius:10,borderColor:'gray',paddingHorizontal:20,paddingVertical:12,flexDirection:'row',justifyContent:'space-between',fontSize: 22},
     dropdown:{ borderWidth:1,borderRadius:10,borderColor:'gray',marginTop:10,overflow:'hidden'},
     option:{ paddingHorizontal:20,paddingVertical:8,overflow:'hidden'},
     disabledoption:{ paddingHorizontal:20,paddingVertical:8,flexDirection:'row',alignItems:'center', backgroundColor:'whitesmoke',opacity:0.9}

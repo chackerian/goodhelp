@@ -62,7 +62,8 @@ export default function ShareClothes(props) {
   }
 
   async function onSaveItem() {
-    selectREF.current.click()
+    selectREF1.current?.click()
+    selectREF2.current?.click()
     // console.log("url posting", imageURL)
     // await setDoc(doc(firestore, "food", id), {
     //   title: title.value,
