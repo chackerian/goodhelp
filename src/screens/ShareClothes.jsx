@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createRef, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +20,8 @@ import ImageDropper from '../components/ImageDropper';
 import Select from '../components/Select.jsx';
 
 export default function ShareClothes(props) {
+  const selectREF1 = useRef(null)
+  const selectREF2 = useRef(null)
 
   const navigation = useNavigation();
 
@@ -60,25 +62,26 @@ export default function ShareClothes(props) {
   }
 
   async function onSaveItem() {
-    console.log("url posting", imageURL)
-    await setDoc(doc(firestore, "food", id), {
-      title: title.value,
-      picture: imageURL,
-      quantity: quantity.value,
-      deliverable: isEnabled,
-      type: selected1,
-      condition: selected2,
-    });
-    var obj = {
-      picture: imageURL,
-      title: title.value,
-      quantity: quantity.value
-    }
-    setLIST(LIST => [...LIST, obj])
-    setTitle("")
-    setSelected1("")
-    setSelected2("")
-    setQuantity("")
+    selectREF.current.click()
+    // console.log("url posting", imageURL)
+    // await setDoc(doc(firestore, "food", id), {
+    //   title: title.value,
+    //   picture: imageURL,
+    //   quantity: quantity.value,
+    //   deliverable: isEnabled,
+    //   type: selected1,
+    //   condition: selected2,
+    // });
+    // var obj = {
+    //   picture: imageURL,
+    //   title: title.value,
+    //   quantity: quantity.value
+    // }
+    // setLIST(LIST => [...LIST, obj])
+    // setTitle("")
+    // setSelected1("")
+    // setSelected2("")
+    // setQuantity("")
   }
 
   return (
@@ -115,11 +118,15 @@ export default function ShareClothes(props) {
           />
 
           <Select
+            ref={selectREF1}
+            setSelected={(val) => setSelected1(val)}
             data={items}
             placeholder="select type"
             boxStyles={{ width:200, marginLeft: 10, marginBottom: 10 }}/>
 
           <Select
+            ref={selectREF2}
+            setSelected={(val) => setSelected2(val)}
             data={condition}
             placeholder="select condition"
             boxStyles={{ width:200, marginLeft: 10, marginBottom: 10 }}/>

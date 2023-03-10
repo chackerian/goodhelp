@@ -1,49 +1,58 @@
-import { View, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function({
-    data,
-    boxStyles,
-    placeholder,
-}) {
+const selectList = React.forwardRef((props, ref) => {
+    const {
+        data,
+        boxStyles,
+        placeholder,
+        setSelected,
+    } = props;
+    const [current, setCurrent] = useState(null);
+    const [isClosed, setisClosed] = useState(true);
+
+    useEffect(() => {
+        setSelected(current)
+    }, [current])
+
+    const handleReset = () => {
+        setCurrent(null)
+        setSelected(null)
+    }
+    const handleOpen = () => setisClosed(flag => !flag);
+    const handleSelect = (name) => {
+        setCurrent(name)
+        handleOpen()
+    };
+
     const options = data?.map((item, index) => {
-        return <option
-            value={item.value}
-            key={index}>{item.label}</option>
+        return <TouchableOpacity
+            style={styles.option}
+            onPress={() => handleSelect(item.value)}
+            key={index}>
+            <Text>{item.label}</Text>
+        </TouchableOpacity>
     });
 
-    return <View style={[styles.container, boxStyles]}>
-        <select
-            defaultValue='DEFAULT'
-            style={{
-                paddingLeft: 20, paddingRight: 20, paddingTop: 12, paddingBottom: 12,
-                borderRadius: 10,
-                appearance: "none"
-                }}>
-            <option value="DEFAULT" disabled>{placeholder}</option>
-            {options}
-        </select>
-        <View style={styles.after}>
-            <img style={{width: "100%", height: "100%"}}
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAMRJREFUSEvtkrkOwjAQRJOGm44/oaMCPhzoKPgVOsRZ8UZyJGtJfAi5s6VRsvbszu7YbVN4tYXrN1Ug6nC16C+LFmSvwRl8BiqN2N+AC7j3cUJ3sCVhBW7gBN6mwJhYnCW4Os6PRkhgBnsHpq67gycycWdzvk9wBI/cCcS3IiqktXdnweIipjxTiaigupbPytHeC2iq3s67aVIE7CSKo53nCvgi+h/03N5D6gRdnqzRCtrii+QK2AajcRWoFkUdiBKKv6IvukgeGXGzwcMAAAAASUVORK5CYII=" alt="dropDown" />
-        </View>
+    return <View style={boxStyles} >
+        <TouchableOpacity style={styles.wrapper} onPress={handleOpen}>
+            <Text>{current || placeholder}</Text>
+            {current &&
+                <TouchableOpacity onPress={() => handleReset()} ref={ref}>
+                    <Text>X</Text>
+                </TouchableOpacity>}
+        </TouchableOpacity>
+        <View style={[styles.dropdown, isClosed && styles.isClosed]} >{options}</View>
     </View>
-}
+})
 
 const styles = StyleSheet.create({
-    container: {
-        position: "relative",
-        '&:hover': {
-            textDecoration: 'underline',
-        },
-    },
-    after: {
-        top: 6,
-        right: 10,
-        width: 20,
-        height: 20,
-        top: "50%",
-        fontSize: "1rem",
-        position: "absolute",
-        transform: "translate(-50%, -50%)"
-    }
+    isClosed: {height: 0, display: "none"},
+    wrapper:{ borderWidth:1,borderRadius:10,borderColor:'gray',paddingHorizontal:20,paddingVertical:12,flexDirection:'row',justifyContent:'space-between' },
+    dropdown:{ borderWidth:1,borderRadius:10,borderColor:'gray',marginTop:10,overflow:'hidden'},
+    option:{ paddingHorizontal:20,paddingVertical:8,overflow:'hidden'},
+    disabledoption:{ paddingHorizontal:20,paddingVertical:8,flexDirection:'row',alignItems:'center', backgroundColor:'whitesmoke',opacity:0.9}
 })
+
+export default selectList
