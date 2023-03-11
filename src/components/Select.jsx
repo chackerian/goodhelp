@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { RiArrowDropDownLine, RiArrowDropUpLine, RiCloseLine } from "react-icons/ri"
 
-const selectList = React.forwardRef((props, ref) => {
+const Select = React.forwardRef((props, ref) => {
     const {
         data,
         boxStyles,
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     disabledoption:{ paddingHorizontal:20,paddingVertical:8,flexDirection:'row',alignItems:'center', backgroundColor:'whitesmoke',opacity:0.9}
 })
 
-export default selectList
+export default Select
