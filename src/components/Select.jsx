@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RiArrowDropDownLine, RiArrowDropUpLine, RiCloseLine } from "react-icons/ri"
+import { AntDesign } from '@expo/vector-icons'; 
 
 const Select = React.forwardRef((props, ref) => {
     const {
@@ -36,18 +36,18 @@ const Select = React.forwardRef((props, ref) => {
         </TouchableOpacity>
     });
 
-    return <View style={boxStyles}>
+    return <View style={boxStyles} >
         <TouchableOpacity style={styles.wrapper} onPress={handleOpen}>
             <Text>{current || placeholder}</Text>
             {current ?
                 <TouchableOpacity onPress={() => handleReset()} ref={ref}>
-                    <RiCloseLine />
+                    <AntDesign name="close" size={24} color="black" />
                 </TouchableOpacity>
             :
-                isClosed ? <RiArrowDropDownLine/> : <RiArrowDropUpLine />
+                isClosed ? <AntDesign name="caretdown" size={24} color="black" /> : <AntDesign name="caretup" size={24} color="black" />
             }
         </TouchableOpacity>
-        <View style={[styles.dropdown, isClosed && styles.isClosed]}>{options}</View>
+        <View style={[styles.dropdown, isClosed && styles.isClosed]} >{options}</View>
     </View>
 })
 

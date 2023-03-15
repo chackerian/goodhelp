@@ -35,6 +35,21 @@ export default function ShareClothes(props) {
 
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+   const empty = () => {
+    return <View style={styles.empty}>
+        <Text></Text>
+      </View>
+  }
+
+  const Item = ({title, quantity, picture, index}) => <View style={styles.item} key={index}>
+      <Image source={{uri: picture}}
+        style={styles.icon}
+      />
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.quantity}>{quantity}</Text>
+    </View>
+  
   const [items, setItems] = useState([
     { label: 'Polo Shirt', value: 'Polo Shirt' },
     { label: 'Dress', value: 'Dress' },
@@ -64,36 +79,34 @@ export default function ShareClothes(props) {
   async function onSaveItem() {
     selectREF1.current?.click()
     selectREF2.current?.click()
-    // console.log("url posting", imageURL)
-    // await setDoc(doc(firestore, "food", id), {
-    //   title: title.value,
-    //   picture: imageURL,
-    //   quantity: quantity.value,
-    //   deliverable: isEnabled,
-    //   type: selected1,
-    //   condition: selected2,
-    // });
-    // var obj = {
-    //   picture: imageURL,
-    //   title: title.value,
-    //   quantity: quantity.value
-    // }
-    // setLIST(LIST => [...LIST, obj])
-    // setTitle("")
-    // setSelected1("")
-    // setSelected2("")
-    // setQuantity("")
+    console.log("url posting", imageURL)
+    await setDoc(doc(firestore, "food", id), {
+      title: title.value,
+      picture: imageURL,
+      quantity: quantity.value,
+      deliverable: isEnabled,
+      type: selected1,
+      condition: selected2,
+    });
+    var obj = {
+      picture: imageURL,
+      title: title.value,
+      quantity: quantity.value
+    }
+    setLIST(LIST => [...LIST, obj])
+    setTitle("")
+    setQuantity("")
   }
 
   return (
     <ScrollView style={styles.container}>
       <View>
-        {/* <FlatList
+        <FlatList
           data={LIST}
           ListEmptyComponent={empty}
           renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
           keyExtractor={(item, index) => index.toString()}
-        /> */}
+        />
       </View>
       <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
         <View>
