@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
@@ -11,10 +11,13 @@ import { firestore } from '../../firebase.js';
 import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
 import SearchLocationInput from '../components/SearchLocationInput';
+import Select from '../components/Select';
 
 export default function PostAnimals(props) {
 
   const navigation = useNavigation();
+  const selectREF1 = useRef(null)
+  const selectREF2 = useRef(null)
 
   const [LIST, setLIST] = useState([]);
   const [city, setCity] = useState('');
@@ -46,6 +49,11 @@ export default function PostAnimals(props) {
   ]);
 
   const id = title.value + "-" + String(Math.round(Math.random()*100000))
+  const [groupID, setGroupID] = React.useState();
+
+  useEffect(() => {
+    setGroupID(Math.round(Math.random()*100000))
+  },[])
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -73,6 +81,7 @@ export default function PostAnimals(props) {
     console.log("url posting", imageURL)
     await setDoc(doc(firestore, "animals", id), {
       title: title.value,
+      groupID: groupID,
       picture: imageURL,
       quantity: quantity.value,
       type: selected1,
@@ -118,27 +127,21 @@ export default function PostAnimals(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+          <SearchLocationInput style={{width: "100%", height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
 
-          <SelectList
+          <Select
+            ref={selectREF1}
             setSelected={(val) => setSelected1(val)}
             data={items}
-            boxStyles={{width:"100%"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
-            save="value"
             placeholder="select type"
-          />
-          <SelectList
-            setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: "100%", position: "relative"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
+            boxStyles={{ width:"100%", marginBottom: 10 }}/>
 
+          <Select
+            ref={selectREF2}
+            setSelected={(val) => setSelected2(val)}
             data={condition}
-            save="value"
-            placeholder="select age"
-          />
+            placeholder="select condition"
+            boxStyles={{ width:"100%", marginBottom: 10 }}/>
 
           <TextInput
             label="Quantity"
@@ -208,6 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     width: 300,
     alignItems: "center",
+    marginBottom: 100,
   },
   container: {
     flex: 1,
@@ -233,6 +237,7 @@ const styles = StyleSheet.create({
   },
   switch: {
     width: 30,
+    marginRight: 20,
   },
   switchContainer: {
     flexDirection: "row",

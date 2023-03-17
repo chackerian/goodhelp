@@ -16,6 +16,7 @@ export default function AcceptFood(props) {
     const querySnapshot = await getDocs(collection(firestore, "food"));
     querySnapshot.forEach((doc) => {
       setLIST(LIST => [...LIST, doc.data()])
+      console.log(doc.data())
     });
   }
 
@@ -33,11 +34,24 @@ export default function AcceptFood(props) {
     )
   }
 
-  const Item = ({title, quantity, picture, index}) => (
-    <View style={styles.item} key={index}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.quantity}>{quantity}</Text>
-    </View>
+  const goToListing = function(groupID){
+    console.log("groupID", groupID)
+    navigation.navigate('Donation Screen', {
+      collectionName: 'food',
+      groupID: groupID,
+    })
+  }
+
+  const Item = ({title, quantity, picture, index, groupID}) => (
+    <TouchableOpacity onPress={() => {goToListing(groupID)}}>
+      <View style={styles.item} key={index}>
+        <Image source={{uri: picture}}
+          style={styles.icon}
+        />
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.quantity}>{quantity}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -46,31 +60,21 @@ export default function AcceptFood(props) {
         data={LIST}
         scrollEnabled={true}
         ListEmptyComponent={empty}
-        renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
+        renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} groupID={item.groupID} />}
         keyExtractor={(item, index) => index.toString()}
       />
     </View>
   )
 }
 
-// title
-// category
-// quantity
-// condition
-// date of listing created
-// date and time of donation
-// do they deliver?
-// address
-
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'column',
-    marginTop: 4,
-    alignItems: 'center',
-  },
   centered: {
     flex: 1,
     alignItems: "center",
+  },
+  icon: {
+    width: 36,
+    height: 38,
   },
   forgot: {
     fontSize: 13,

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
-import { SelectList } from 'react-native-dropdown-select-list'
 import { Text, TextInput } from 'react-native-paper'
 import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
+
+import CalendarPicker from 'react-native-calendar-picker';
 
 import { firestore } from '../../firebase.js';
 
@@ -11,10 +12,13 @@ import { firestore } from '../../firebase.js';
 import Button from '../components/Button';
 import ImageDropper from '../components/ImageDropper';
 import SearchLocationInput from '../components/SearchLocationInput';
+import Select from '../components/Select';
 
 export default function ShareFood(props) {
 
   const navigation = useNavigation();
+  const selectREF1 = useRef(null)
+  const selectREF2 = useRef(null)
 
   const [LIST, setLIST] = useState([]);
   const [city, setCity] = useState('');
@@ -26,12 +30,27 @@ export default function ShareFood(props) {
 
   const [selected1, setSelected1] = useState("");
   const [selected2, setSelected2] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = React.useState(null);
+  const [selectedEndDate, setSelectedEndDate] = React.useState(null);
+  const minDate = new Date(); // Today
+  const maxDate = new Date(2026, 6, 3);
+
+  function onDateChange(date, type) {
+    if (type === 'END_DATE') {
+      setSelectedEndDate(date)
+    } else {
+      setSelectedStartDate(date)
+      setSelectedEndDate(null)
+    }
+  }
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedtype, setSelectedType] = useState([]);
   const [title, setTitle] = useState({ value: '', error: '' });
   const [selectedcondition, setSelectedCondition] = useState([]);
   const [quantity, setQuantity] = useState({ value: '', error: '' });
+  const [comments, setComments] = useState({ value: '', error: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ value: '', error: '' });
   const [items, setItems] = useState([
     { label: 'Fruit', value: 'Fruit' },
     { label: 'Vegetables', value: 'Vegetables' },
@@ -41,6 +60,11 @@ export default function ShareFood(props) {
   ]);
 
   const id = title.value + "-" + String(Math.round(Math.random()*100000))
+  const [groupID, setGroupID] = React.useState();
+
+  useEffect(() => {
+    setGroupID(Math.round(Math.random()*100000))
+  },[])
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -65,11 +89,18 @@ export default function ShareFood(props) {
   ]);
 
   async function onSaveItem() {
-    console.log("url posting", imageURL)
+    console.log("id", id)
     await setDoc(doc(firestore, "food", id), {
       title: title.value,
+      groupID: groupID,
       picture: imageURL,
       quantity: quantity.value,
+      address: location,
+      phoneNumber: phoneNumber,
+      email: props.route.params.user.email,
+      comments: comments,
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
       deliverable: isEnabled,
       type: selected1,
       condition: selected2,
@@ -81,9 +112,9 @@ export default function ShareFood(props) {
     }
     setLIST(LIST => [...LIST, obj])
     setTitle("")
-    setSelected1("")
-    setSelected2("")
     setQuantity("")
+    setPhoneNumber("")
+    setComments("")
   }
 
   return (
@@ -96,7 +127,7 @@ export default function ShareFood(props) {
         keyExtractor={(item, index) => index.toString()}
       />
       </View>
-        <View style={{ gap: 12, maxWidth: 650, width: "100%", marginHorizontal: "auto" }}>
+        <View style={{ gap: 12, maxWidth: 600, width: "100%", marginHorizontal: "auto" }}>
           <View>
             <Text style={styles.formheading}>Donate Food</Text>
             <Text style={styles.formintro}>No one has ever become poor from giving.</Text>
@@ -126,27 +157,21 @@ export default function ShareFood(props) {
             autoCapitalize="none"
           />
 
-          <SearchLocationInput style={{width: "100%", height: 60, outline: "none"}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+          <SearchLocationInput style={{width: "100%", height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
 
-          <SelectList
+          <Select
+            ref={selectREF1}
             setSelected={(val) => setSelected1(val)}
             data={items}
-            boxStyles={{width:"100%"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
-            save="value"
             placeholder="select type"
-          />
-          <SelectList
-            setSelected={(val) => setSelected2(val)}
-            boxStyles={{width: "100%", position: "relative"}}
-            inputStyles={{ outline: "none"}}
-            dropdownStyles={{width: "100%"}}
+            boxStyles={{ width:"100%", marginTop: 15 }}/>
 
+          <Select
+            ref={selectREF2}
+            setSelected={(val) => setSelected2(val)}
             data={condition}
-            save="value"
             placeholder="select condition"
-          />
+            boxStyles={{ width:"100%", marginTop: 15 }}/>
 
           <TextInput
             label="Quantity"
@@ -159,6 +184,39 @@ export default function ShareFood(props) {
             errorText={quantity.error}
             autoCapitalize="none"
             keyboardType='numeric'
+          />
+          <TextInput
+            label="Phone Number"
+            returnKeyType="next"
+            theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
+            style={styles.forminputs}
+            value={phoneNumber.value}
+            onChangeText={(text) => setPhoneNumber({ value: text, error: '' })}
+            error={!!phoneNumber.error}
+            errorText={phoneNumber.error}
+            autoCapitalize="none"
+            keyboardType='numeric'
+          />
+          <CalendarPicker
+            startFromMonday={true}
+            allowRangeSelection={true}
+            minDate={minDate}
+            maxDate={maxDate}
+            todayBackgroundColor="#f2e6ff"
+            selectedDayColor="#7300e6"
+            selectedDayTextColor="#FFFFFF"
+            onDateChange={onDateChange}
+          />
+          <TextInput
+            label="Comments"
+            returnKeyType="next"
+            theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
+            style={styles.forminputs}
+            value={comments.value}
+            onChangeText={(text) => setComments({ value: text, error: '' })}
+            error={!!comments.error}
+            errorText={comments.error}
+            autoCapitalize="none"
           />
           <ImageDropper setImageURL={setImageURL}/>
           <View style={styles.centered}>
@@ -205,8 +263,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 120
   },
-  deliverable: {
-  },
   default: {
     backgroundColor: 'blue',
     width: 280,
@@ -216,6 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     width: 300,
     alignItems: "center",
+    marginBottom: 100,
   },
   container: {
     flex: 1,
@@ -241,6 +298,7 @@ const styles = StyleSheet.create({
   },
   switch: {
     width: 30,
+    marginRight: 20,
   },
   switchContainer: {
     flexDirection: "row",

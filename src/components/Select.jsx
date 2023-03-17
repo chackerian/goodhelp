@@ -38,7 +38,7 @@ const Select = React.forwardRef((props, ref) => {
 
     return <View style={boxStyles} >
         <TouchableOpacity style={styles.wrapper} onPress={handleOpen}>
-            <Text>{current || placeholder}</Text>
+            <Text style={styles.selected}>{current || placeholder}</Text>
             {current ?
                 <TouchableOpacity onPress={() => handleReset()} ref={ref}>
                     <AntDesign name="close" size={24} color="black" />
@@ -47,12 +47,13 @@ const Select = React.forwardRef((props, ref) => {
                 isClosed ? <AntDesign name="caretdown" size={24} color="black" /> : <AntDesign name="caretup" size={24} color="black" />
             }
         </TouchableOpacity>
-        <View style={[styles.dropdown, isClosed && styles.isClosed]} >{options}</View>
+        <View style={[styles.dropdown, isClosed && styles.isClosed]}>{options}</View>
     </View>
 })
 
 const styles = StyleSheet.create({
     isClosed: {height: 0, display: "none"},
+    selected:{ flex: 1, alignItems:'center', justifyContent: 'center'},
     wrapper:{ borderWidth:1,borderRadius:10,borderColor:'gray',paddingHorizontal:20,paddingVertical:12,flexDirection:'row',justifyContent:'space-between',fontSize: 22},
     dropdown:{ borderWidth:1,borderRadius:10,borderColor:'gray',marginTop:10,overflow:'hidden'},
     option:{ paddingHorizontal:20,paddingVertical:8,overflow:'hidden'},

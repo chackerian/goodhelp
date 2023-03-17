@@ -16,6 +16,8 @@ import AcceptFood from './src/screens/AcceptFood'
 import AcceptClothes from './src/screens/AcceptClothes'
 import AcceptAnimals from './src/screens/AcceptAnimals'
 
+import DonationScreen from './src/screens/DonationScreen'
+
 import HomeScreen from './src/screens/HomeScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
@@ -168,6 +170,11 @@ function MyTabs(props) {
         <AppStack.Screen
           name="Adopt Animals"
           component={AcceptAnimals}
+          initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen
+          name="Donation Screen"
+          component={DonationScreen}
           initialParams={{user: props.user, logout: props.logout}}
         />
       </AppStack.Navigator>
