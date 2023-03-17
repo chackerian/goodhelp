@@ -2,7 +2,7 @@ import React, { createRef, useRef, useState, useEffect } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { Text, TextInput, RadioButton } from 'react-native-paper';
-import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, Linking } from 'react-native';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { Entypo } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons'; 
@@ -35,6 +35,22 @@ export default function DonationScreen({route}) {
   		groupData = LIST[0]
   }
 
+  const phoneDetails = function(){
+  	return(
+  		<TouchableOpacity onPress={() => {Linking.openURL('tel:'+groupData.phoneNumber)}} >
+  			<Feather name="phone" size={24} color="black" /> 
+  		</TouchableOpacity>
+  	)
+  }
+
+  const emailDetails = function(){
+  	return(
+  		<TouchableOpacity onPress={() => {Linking.openURL('mailto:'+groupData.email)}} >
+  			<Entypo name="email" size={24} color="black" />
+  		</TouchableOpacity>
+  	)
+  }
+
   return (
     <ScrollView style={styles.container}>
       {LIST.map((item) => {
@@ -44,14 +60,14 @@ export default function DonationScreen({route}) {
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.type}>{item.type}</Text>
             <Text style={styles.condition}>{item.condition}</Text>
-            <Text style={styles.type}>{item.quantity}</Text>
+            <Text style={styles.quantity}>{item.quantity}</Text>
           </View>
         );
       })}
-      <View style={styles.centered}>
+      <View style={styles.contact}>
           <Text style={styles.location}>{groupData.address}</Text>
-          { groupData.phoneNumber && <Feather name="phone" size={24} color="black" />}
-          { groupData.email && <Entypo name="email" size={24} color="black" />}
+          { groupData.phoneNumber && phoneDetails()}
+          { groupData.email && emailDetails()}
       </View>
     </ScrollView>
   );
@@ -77,15 +93,24 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   quantity: {
-    fontSize: 20,
+    fontSize: 14,
     marginLeft: 'auto'
+  },
+  type: {
+    fontSize: 14,
+    marginLeft: 20,
+  },
+  condition: {
+    fontSize: 14,
+    marginLeft: 20,
   },
   icon: {
     width: 60,
     height: 65,
   },
-  centered: {
+  contact: {
     alignItems: "center",
+    flexDirection: "row",
     paddingTop: 40,
   },
 	defaultsave: {
