@@ -115,6 +115,8 @@ export default function ShareFood(props) {
     setQuantity("")
     setPhoneNumber("")
     setComments("")
+    selectREF1?.current?.click();
+    selectREF2?.current?.click();
   }
 
   return (

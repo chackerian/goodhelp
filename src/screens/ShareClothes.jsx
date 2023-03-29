@@ -201,17 +201,6 @@ export default function ShareClothes(props) {
             style={styles.forminputs}
           />
           <TextInput
-            label="Comments"
-            returnKeyType="next"
-            theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
-            style={styles.forminputs}
-            value={comments.value}
-            onChangeText={(text) => setComments({ value: text, error: '' })}
-            error={!!comments.error}
-            errorText={comments.error}
-            autoCapitalize="none"
-          />
-          <TextInput
             label="Phone Number"
             returnKeyType="next"
             theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
@@ -232,6 +221,17 @@ export default function ShareClothes(props) {
             selectedDayColor="#7300e6"
             selectedDayTextColor="#FFFFFF"
             onDateChange={onDateChange}
+          />
+          <TextInput
+            label="Comments"
+            returnKeyType="next"
+            theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
+            style={styles.forminputs}
+            value={comments.value}
+            onChangeText={(text) => setComments({ value: text, error: '' })}
+            error={!!comments.error}
+            errorText={comments.error}
+            autoCapitalize="none"
           />
           <ImageDropper />
           <View style={styles.centered}>

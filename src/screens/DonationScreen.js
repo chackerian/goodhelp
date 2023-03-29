@@ -58,9 +58,11 @@ export default function DonationScreen({route}) {
           <View style={styles.item}>
           	<Image source={{uri: item.picture}} style={styles.icon}/>
             <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.type}>{item.type}</Text>
-            <Text style={styles.condition}>{item.condition}</Text>
-            <Text style={styles.quantity}>{item.quantity}</Text>
+            <View>
+            	<Text style={styles.type}>{item.type}</Text>
+            	<Text style={styles.condition}>{item.condition}</Text>
+            	<Text style={styles.quantity}>{item.quantity}</Text>
+            </View>
           </View>
         );
       })}
