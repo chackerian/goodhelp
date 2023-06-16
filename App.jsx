@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, createContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer, createSwitchNavigator, createAppContainer, createNavigatorFactory } from '@react-navigation/native';
-
+import { Button } from 'react-native';
 import { auth, store } from './firebase.js';
 
 //  Import of all screens
@@ -161,6 +161,16 @@ function MyTabs(props) {
           name="Accept Food"
           component={AcceptFood}
           initialParams={{user: props.user, logout: props.logout}}
+          options={{
+            headerRight: () => (
+              <Button
+                onPress={() => alert('This is a button!')}
+                title="map"
+                color="black"
+              />
+            ),
+          }}
+    
         />
         <AppStack.Screen
           name="Accept Clothes"

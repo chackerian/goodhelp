@@ -73,6 +73,7 @@ export default function AcceptFood(props) {
 
   return (
     <View style={styles.container}>
+      
       <FlatList
         data={LIST}
         scrollEnabled={true}
@@ -80,7 +81,10 @@ export default function AcceptFood(props) {
         renderItem={({item}) => <Item title={item.title} quantity={item.quantity} dateCreated={item.dateCreated} picture={item.picture} groupID={item.groupID} />}
         keyExtractor={(item, index) => index.toString()}
       />
+    
     </View>
+
+  
   )
 }
 
