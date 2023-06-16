@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react'
-import { doc, setDoc } from "firebase/firestore";
+import React, { useState, useRef, useEffect } from 'react'
+import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Text, TextInput } from 'react-native-paper'
 import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
+
+import CalendarPicker from 'react-native-calendar-picker';
 
 import { firestore } from '../../firebase.js';
 
@@ -27,13 +29,28 @@ export default function PostAnimals(props) {
   const [location, setLocation] = useState("");
   const [imageURL, setImageURL] = useState("");
 
+  const [comments, setComments] = useState({ value: '', error: '' });
+  const [phoneNumber, setPhoneNumber] = useState({ value: '', error: '' });
+
   const [selected1, setSelected1] = useState("");
   const [selected2, setSelected2] = useState("");
+  const [selectedStartDate, setSelectedStartDate] = React.useState(null);
+  const [selectedEndDate, setSelectedEndDate] = React.useState(null);
+  const minDate = new Date(); // Today
+  const maxDate = new Date(2026, 6, 3);
+
+  function onDateChange(date, type) {
+    if (type === 'END_DATE') {
+      setSelectedEndDate(date)
+    } else {
+      setSelectedStartDate(date)
+      setSelectedEndDate(null)
+    }
+  }
 
   const [isEnabled, setIsEnabled] = useState(false);
   const [selectedtype, setSelectedType] = useState([]);
   const [title, setTitle] = useState({ value: '', error: '' });
-  const [quantity, setQuantity] = useState({ value: '', error: '' });
   const [items, setItems] = useState([
     { label: 'Dog', value: 'Dog' },
     { label: 'Cat', value: 'Cat' },
@@ -52,7 +69,10 @@ export default function PostAnimals(props) {
   const [groupID, setGroupID] = React.useState();
 
   useEffect(() => {
-    setGroupID(Math.round(Math.random()*100000))
+    var id = Math.round(Math.random()*1000000000)
+    const q = query(collection(firestore, "animals"), where("groupID", "==", id));
+    console.log("QUERY", q)
+    setGroupID(id)
   },[])
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -63,12 +83,11 @@ export default function PostAnimals(props) {
       </View>
   }
 
-  const Item = ({title, quantity, picture, index}) => <View style={styles.item} key={index}>
+  const Item = ({title, picture, index}) => <View style={styles.item} key={index}>
       <Image source={{uri: picture}}
         style={styles.icon}
       />
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.quantity}>{quantity}</Text>
     </View>
 
   const [condition, setCondition] = useState([
@@ -78,26 +97,29 @@ export default function PostAnimals(props) {
   ]);
 
   async function onSaveItem() {
-    console.log("url posting", imageURL)
+    console.log("URL posting", imageURL)
     await setDoc(doc(firestore, "animals", id), {
       title: title.value,
       groupID: groupID,
       picture: imageURL,
-      quantity: quantity.value,
+      phoneNumber: phoneNumber.value,
+      email: props.route.params.user.email,
+      comments: comments.value,
+      startDate: selectedStartDate.toDate(),
+      endDate: selectedEndDate.toDate(),
+      dateCreated: new Date(),
       type: selected1,
       condition: selected2,
     });
     var obj = {
       picture: imageURL,
       title: title.value,
-      quantity: quantity.value
     }
     setLIST(LIST => [...LIST, obj])
     setTitle("")
     setSelected1("")
     setSelected2("")
     setLocation("")
-    setQuantity("")
   }
 
   return (
@@ -106,7 +128,7 @@ export default function PostAnimals(props) {
       <FlatList
         data={LIST}
         ListEmptyComponent={empty}
-        renderItem={({item}) => <Item title={item.title} quantity={item.quantity} picture={item.picture} />}
+        renderItem={({item}) => <Item title={item.title} picture={item.picture} />}
         keyExtractor={(item, index) => index.toString()}
       />
       </View>
@@ -144,16 +166,37 @@ export default function PostAnimals(props) {
             boxStyles={{ width:"100%", marginBottom: 10 }}/>
 
           <TextInput
-            label="Quantity"
+            label="Phone Number"
             returnKeyType="next"
             theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
             style={styles.forminputs}
-            value={quantity.value}
-            onChangeText={(text) => setQuantity({ value: text, error: '' })}
-            error={!!quantity.error}
-            errorText={quantity.error}
+            value={phoneNumber.value}
+            onChangeText={(text) => setPhoneNumber({ value: text, error: '' })}
+            error={!!phoneNumber.error}
+            errorText={phoneNumber.error}
             autoCapitalize="none"
             keyboardType='numeric'
+          />
+          <CalendarPicker
+            startFromMonday={true}
+            allowRangeSelection={true}
+            minDate={minDate}
+            maxDate={maxDate}
+            todayBackgroundColor="#f2e6ff"
+            selectedDayColor="#7300e6"
+            selectedDayTextColor="#FFFFFF"
+            onDateChange={onDateChange}
+          />
+          <TextInput
+            label="Comments"
+            returnKeyType="next"
+            theme={{ colors: { primary: 'blue', underlineColor: 'transparent', } }}
+            style={styles.forminputs}
+            value={comments.value}
+            onChangeText={(text) => setComments({ value: text, error: '' })}
+            error={!!comments.error}
+            errorText={comments.error}
+            autoCapitalize="none"
           />
           <ImageDropper setImageURL={setImageURL}/>
           <View style={styles.centered}>

@@ -8,6 +8,7 @@ import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
 
 import { firestore } from '../../firebase.js';
+import moment from "moment";
 
 import Button from '../components/Button';
 
@@ -15,7 +16,7 @@ export default function DonationScreen({route}) {
 
  	const { collectionName, groupID } = route.params;
 
-	const q = query(collection(firestore, "food"), where("groupID", "==", groupID));
+	const q = query(collection(firestore, collectionName), where("groupID", "==", groupID));
 	const [LIST, setLIST] = useState([])
 	var groupData = []
 
@@ -54,6 +55,8 @@ export default function DonationScreen({route}) {
   return (
     <ScrollView style={styles.container}>
       {LIST.map((item) => {
+        var startDate = new Date(item.startDate.seconds * 1000 + item.startDate.nanoseconds/1000000)
+        var endDate = new Date(item.endDate.seconds * 1000 + item.endDate.nanoseconds/1000000)
         return (
           <View style={styles.item}>
           	<Image source={{uri: item.picture}} style={styles.icon}/>
@@ -62,6 +65,8 @@ export default function DonationScreen({route}) {
             	<Text style={styles.type}>{item.type}</Text>
             	<Text style={styles.condition}>{item.condition}</Text>
             	<Text style={styles.quantity}>{item.quantity}</Text>
+              <Text style={styles.start}>{moment(startDate).format("dddd, MMMM Do YYYY")}</Text>
+              <Text style={styles.end}>{moment(endDate).format("dddd, MMMM Do YYYY")}</Text>
             </View>
           </View>
         );
@@ -79,7 +84,7 @@ export default function DonationScreen({route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 50,
+    padding: 30,
   },
   item: {
     flexDirection: "row",
@@ -96,7 +101,7 @@ const styles = StyleSheet.create({
   },
   quantity: {
     fontSize: 14,
-    marginLeft: 'auto'
+    marginLeft: 'auto',
   },
   type: {
     fontSize: 14,

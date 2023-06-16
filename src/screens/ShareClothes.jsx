@@ -1,5 +1,5 @@
 import React, { createRef, useRef, useState, useEffect } from 'react';
-import { doc, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { Text, TextInput, RadioButton } from 'react-native-paper';
@@ -42,7 +42,7 @@ export default function ShareClothes(props) {
   const [groupID, setGroupID] = React.useState();
 
   useEffect(() => {
-    setGroupID(Math.round(Math.random()*100000))
+    setGroupID(Math.round(Math.random()*1000000000))
   },[])
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -91,10 +91,6 @@ export default function ShareClothes(props) {
   const minDate = new Date(); // Today
   const maxDate = new Date(2026, 6, 3);
 
-  function onAddItem() {
-    setShowForm(true)
-  }
-
   function onDateChange(date, type) {
     if (type === 'END_DATE') {
       setSelectedEndDate(date)
@@ -106,17 +102,18 @@ export default function ShareClothes(props) {
 
   async function onSaveItem() {
     console.log("id", id,"groupid", props.user)
-    await setDoc(doc(firestore, "food", id), {
+    await setDoc(doc(firestore, "clothing", id), {
       title: title.value,
       groupID: groupID,
       picture: imageURL,
       quantity: quantity.value,
       address: location,
-      phoneNumber: phoneNumber,
+      phoneNumber: phoneNumber.value,
       email: props.route.params.user.email,
-      comments: comments,
-      startDate: selectedStartDate,
-      endDate: selectedEndDate,
+      comments: comments.value,
+      startDate: selectedStartDate.toDate(),
+      endDate: selectedEndDate.toDate(),
+      dateCreated: new Date(),
       deliverable: isEnabled,
       type: selected1,
       condition: selected2,

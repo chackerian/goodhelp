@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { doc, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { useNavigation } from '@react-navigation/native';
 import { Text, TextInput } from 'react-native-paper'
 import { TouchableOpacity, StyleSheet, View, ScrollView, Switch, Image, Dimensions, FlatList } from 'react-native';
@@ -63,7 +63,7 @@ export default function ShareFood(props) {
   const [groupID, setGroupID] = React.useState();
 
   useEffect(() => {
-    setGroupID(Math.round(Math.random()*100000))
+    setGroupID(Math.round(Math.random()*1000000000))
   },[])
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -89,18 +89,19 @@ export default function ShareFood(props) {
   ]);
 
   async function onSaveItem() {
-    console.log("id", id)
+    console.log("DATE", selectedStartDate, selectedEndDate)
     await setDoc(doc(firestore, "food", id), {
       title: title.value,
       groupID: groupID,
       picture: imageURL,
       quantity: quantity.value,
       address: location,
-      phoneNumber: phoneNumber,
+      phoneNumber: phoneNumber.value,
       email: props.route.params.user.email,
-      comments: comments,
-      startDate: selectedStartDate,
-      endDate: selectedEndDate,
+      comments: comments.value,
+      startDate: selectedStartDate.toDate(),
+      endDate: selectedEndDate.toDate(),
+      dateCreated: new Date(),
       deliverable: isEnabled,
       type: selected1,
       condition: selected2,
