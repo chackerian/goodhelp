@@ -22,6 +22,8 @@ import HomeScreen from './src/screens/HomeScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import RegisterScreen from './src/screens/RegisterScreen'
 
+import MapScreen from './src/screens/MapScreen'
+
 export default function AuthNavigator() {
 
   const [user, setUser] = useState(true);
@@ -161,16 +163,15 @@ function MyTabs(props) {
           name="Accept Food"
           component={AcceptFood}
           initialParams={{user: props.user, logout: props.logout}}
-          options={{
+          options={({ navigation }) => ({
             headerRight: () => (
               <Button
-                onPress={() => alert('This is a button!')}
+                onPress={() => navigation.navigate('MapScreen')} // Navigate to the MapScreen
                 title="map"
                 color="black"
               />
             ),
-          }}
-    
+          })}
         />
         <AppStack.Screen
           name="Accept Clothes"
@@ -186,6 +187,10 @@ function MyTabs(props) {
           name="Donation Screen"
           component={DonationScreen}
           initialParams={{user: props.user, logout: props.logout}}
+        />
+        <AppStack.Screen 
+          name="MapScreen" 
+          component={MapScreen}
         />
       </AppStack.Navigator>
     </NavigationContainer>
