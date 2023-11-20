@@ -16,7 +16,7 @@ export default function AcceptFood(props) {
     const querySnapshot = await getDocs(query(collection(firestore, "food"), orderBy('dateCreated')));
     querySnapshot.forEach((doc) => {
       setLIST(LIST => [...LIST, doc.data()])
-      console.log("DATES", doc.data().dateCreated.seconds)
+      // console.log("DATES", doc.data().dateCreated.seconds)
     });
   }
 

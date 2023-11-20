@@ -19,14 +19,22 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chackerian.goodhelp"
+      "bundleIdentifier": "com.chackerian.goodhelp",
+      "config": {
+        "googleMapsApiKey": "YOUR_IOS_API_KEY"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.chackerian.goodhelp"
+      "package": "com.chackerian.goodhelp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCJov7qfBfuN4tNruFDCUCBL_DQnY-8ROQ"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
