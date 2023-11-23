@@ -21,7 +21,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.chackerian.goodhelp",
       "config": {
-        "googleMapsApiKey": "YOUR_IOS_API_KEY"
+        "googleMapsApiKey": "AIzaSyCJov7qfBfuN4tNruFDCUCBL_DQnY-8ROQ"
       }
     },
     "android": {

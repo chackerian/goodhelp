@@ -1,5 +1,4 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, createContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,8 +24,7 @@ import RegisterScreen from './src/screens/RegisterScreen'
 import MapScreen from './src/screens/MapScreen'
 
 export default function AuthNavigator() {
-
-  const [user, setUser] = useState(true);
+    const [user, setUser] = useState(true);
 
     const addUser = async (value) => {
       try {
@@ -52,15 +50,13 @@ export default function AuthNavigator() {
       }
     }
 
-      useEffect(() => {
-        getUser()
-      }, [])
+    useEffect(() => {
+      getUser()
+    }, [])
 
     function login(a) {
-        console.log("REF")
         addUser(a)
         const userRef = store.collection('users').doc(a.email);
-        console.log("REF2")
 
         userRef.get().then((doc) => {
             if (doc.exists) {
@@ -89,110 +85,109 @@ export default function AuthNavigator() {
                 }
             }
         })
-
     }
 
     function logout() {
-        console.log("logout")
         auth.signOut()
         addUser(null)
     }
 
-    return user ? (
-    <MyTabs
-      user={user}
-      logout={logout}
-      onStateChange={(state) =>
-        console.log("CHANGED", state)
-      }
-     />
-  ) : (
-    <MyStack login={login} />
-  )
+    return (
+      <NavigationContainer>
+        {user ? (
+          <MyTabs user={user} logout={logout} />
+        ) : (
+          <MyStack login={login} />
+        )}
+      </NavigationContainer>
+    );
 }
 
 const AuthStack = createStackNavigator();
 
 function MyStack(props) {
-
   return (
-    <NavigationContainer>
       <AuthStack.Navigator screenOptions={{
         headerShown: false
         }}>
         <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{ title: 'Goodhelp - Login' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} options={{ title: 'Goodhelp - Register' }} initialParams={{login: props.login}} />
       </AuthStack.Navigator>
-    </NavigationContainer>
   );
 }
 
 const AppStack = createStackNavigator();
 
 function MyTabs(props) {
-
     return (
-      <NavigationContainer>
         <AppStack.Navigator
           initialRouteName="Home"
         >
-        <AppStack.Screen
-          name="Home"
-          component={HomeScreen}
-          initialParams={{user: props.user, logout: props.logout}}
-          options={{
-            title: 'Home',
-          }}
-        />
-        <AppStack.Screen
-          name="Share Food"
-          component={ShareFood}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen
-          name="Share Clothes"
-          component={ShareClothes}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen
-          name="Post Animals"
-          component={PostAnimals}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen
-          name="Accept Food"
-          component={AcceptFood}
-          initialParams={{user: props.user, logout: props.logout}}
-          options={({ navigation }) => ({
-            headerRight: () => (
-              <Button
-                onPress={() => navigation.navigate('MapScreen')} // Navigate to the MapScreen
-                title="map"
-                color="black"
-              />
-            ),
-          })}
-        />
-        <AppStack.Screen
-          name="Accept Clothes"
-          component={AcceptClothes}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen
-          name="Adopt Animals"
-          component={AcceptAnimals}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen
-          name="Donation Screen"
-          component={DonationScreen}
-          initialParams={{user: props.user, logout: props.logout}}
-        />
-        <AppStack.Screen 
-          name="MapScreen" 
-          component={MapScreen}
-        />
-      </AppStack.Navigator>
-    </NavigationContainer>
+          <AppStack.Screen
+            name="Home"
+            component={HomeScreen}
+            initialParams={{user: props.user, logout: props.logout}}
+            options={{
+              title: 'Home',
+            }}
+          />
+          <AppStack.Screen
+            name="Share Food"
+            component={ShareFood}
+            initialParams={{user: props.user, logout: props.logout}}
+          />
+          <AppStack.Screen
+            name="Share Clothes"
+            component={ShareClothes}
+            initialParams={{user: props.user, logout: props.logout}}
+          />
+          <AppStack.Screen
+            name="Post Animals"
+            component={PostAnimals}
+            initialParams={{user: props.user, logout: props.logout}}
+          />
+          <AppStack.Screen
+            name="Accept Food"
+            component={AcceptFood}
+            initialParams={{user: props.user, logout: props.logout}}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <Button
+                  onPress={() => navigation.navigate('MapScreen', { fromScreen: 'food' })}
+                  title="map"
+                  color="black"
+                />
+              ),
+            })}
+          />
+          <AppStack.Screen
+            name="Accept Clothes"
+            component={AcceptClothes}
+            initialParams={{user: props.user, logout: props.logout}}
+            options={({ navigation }) => ({
+              headerRight: () => (
+                <Button
+                  onPress={() => navigation.navigate('MapScreen', { fromScreen: 'clothes' })}
+                  title="map"
+                  color="black"
+                />
+              ),
+            })}
+          />
+          <AppStack.Screen
+            name="Adopt Animals"
+            component={AcceptAnimals}
+            initialParams={{user: props.user, logout: props.logout}}
+          />
+          <AppStack.Screen
+            name="Donation Screen"
+            component={DonationScreen}
+            initialParams={{user: props.user, logout: props.logout}}
+          />
+          <AppStack.Screen 
+            name="MapScreen" 
+            component={MapScreen}
+          />
+        </AppStack.Navigator>
     );
 }
