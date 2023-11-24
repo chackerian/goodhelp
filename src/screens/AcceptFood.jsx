@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Text, TextInput, RadioButton } from 'react-native-paper';
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { Text } from 'react-native-paper';
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
 import { TouchableOpacity, StyleSheet, View, FlatList, Image, ScrollView } from 'react-native';
 
 import { firestore } from '../../firebase.js';
@@ -10,17 +10,15 @@ import moment from "moment";
 import Button from '../components/Button';
 
 export default function AcceptFood(props) {
-
   const navigation = useNavigation();
+  const [LIST, setLIST] = useState([])
+
   const setFood = async function(){
     const querySnapshot = await getDocs(query(collection(firestore, "food"), orderBy('dateCreated')));
-    querySnapshot.forEach((doc) => {
-      setLIST(LIST => [...LIST, doc.data()])
-      // console.log("DATES", doc.data().dateCreated.seconds)
-    });
+    const newList = querySnapshot.docs.map((doc) => doc.data());
+    setLIST(newList);
   }
 
-  const [LIST, setLIST] = useState([])
   useEffect(()=> {
     setFood()
   },[])
@@ -73,7 +71,6 @@ export default function AcceptFood(props) {
 
   return (
     <View style={styles.container}>
-      
       <FlatList
         data={LIST}
         scrollEnabled={true}
@@ -81,10 +78,7 @@ export default function AcceptFood(props) {
         renderItem={({item}) => <Item title={item.title} quantity={item.quantity} dateCreated={item.dateCreated} picture={item.picture} groupID={item.groupID} />}
         keyExtractor={(item, index) => index.toString()}
       />
-    
     </View>
-
-  
   )
 }
 

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs } from 'firebase/firestore';
 import { View, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import { firestore } from '../../firebase';
 
-export default function MapScreen() {
-  // const q = query(collection(firestore, collectionName), where("groupID", "==", groupID))
+export default function MapScreen({route}) {
+  const { fromScreen } = route.params;
+  
   const [LIST, setLIST] = useState([])
-
+  
   const getDetails = async function(){
-    const querySnapshot = await getDocs(query(collection(firestore, "food")));
-    querySnapshot.forEach((doc) => {
-      setLIST(LIST => [...LIST, doc.data()])
-    });
+    const querySnapshot = await getDocs(query(collection(firestore, fromScreen)));
+    const newList = querySnapshot.docs.map((doc) => doc.data());
+    setLIST(newList);
   }
 
   useEffect(()=> {
@@ -21,7 +21,7 @@ export default function MapScreen() {
     };
   
     fetchData();
-  },[])
+  },[fromScreen])
 
   return (
     <View style={{ flex: 1 }}>
@@ -29,8 +29,6 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
         initialRegion={{
-          // latitude: 37.78825,
-          // longitude: -122.4324,
           latitude: 41.9338414,
           longitude: -74.0887576,
           latitudeDelta: 0.0922,

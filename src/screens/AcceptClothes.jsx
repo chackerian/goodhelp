@@ -10,14 +10,13 @@ import moment from "moment";
 import Button from '../components/Button';
 
 export default function AcceptClothes(props) {
-
   const navigation = useNavigation();
   const [LIST, setLIST] = useState([])
+
   const setClothes = async function(){
     const querySnapshot = await getDocs(collection(firestore, "clothes"));
-    querySnapshot.forEach((doc) => {
-      setLIST(LIST => [...LIST, doc.data()])
-    });
+    const newList = querySnapshot.docs.map((doc) => doc.data());
+    setLIST(newList);
   }
 
   useEffect(()=> {
@@ -71,7 +70,6 @@ export default function AcceptClothes(props) {
     </View>
   )
 }
-
 
 const styles = StyleSheet.create({
   centered: {
