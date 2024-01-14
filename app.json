@@ -2,8 +2,8 @@
   "expo": {
     "name": "goodhelp",
     "slug": "goodhelp",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "version": "3.0.0",
+    "orientation": "",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
@@ -22,7 +22,8 @@
       "bundleIdentifier": "com.chackerian.goodhelp",
       "config": {
         "googleMapsApiKey": "AIzaSyCJov7qfBfuN4tNruFDCUCBL_DQnY-8ROQ"
-      }
+      },
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,6 +39,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "930b0b09-ace8-4f8d-9c68-807805e9adfa"
+      }
     }
   }
 }
